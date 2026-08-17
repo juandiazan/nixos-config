@@ -9,7 +9,8 @@
     ./modules/dev-tools.nix
     ./modules/browser/firefox.nix
     ./modules/kitty.nix
-    ./modules/zsh.nix
+    ./modules/shell/zsh.nix
+    ./modules/shell/aliases.nix
     ./modules/tmux.nix
     ./modules/starship.nix
     ./modules/neovim.nix
