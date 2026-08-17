@@ -7,6 +7,7 @@
     ./modules/git.nix
     ./modules/applications.nix
     ./modules/dev-tools.nix
+    ./modules/browser/firefox.nix
     ./modules/kitty.nix
     ./modules/zsh.nix
     ./modules/tmux.nix

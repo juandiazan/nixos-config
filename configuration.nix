@@ -1,10 +1,11 @@
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ 
-      ./hardware-configuration.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -57,34 +58,30 @@
   users.users."juani" = {
     isNormalUser = true;
     description = "Juan";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
     packages = with pkgs; [
       kdePackages.kate
-    #  thunderbird
+      #  thunderbird
     ];
   };
-
-  # Install firefox.
-  programs.firefox.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-     wget
-     git
-     bat
+    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    wget
+    git
+    bat
   ];
-
 
   system.stateVersion = "26.05"; # Did you read the comment?
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
   programs.hyprland = {
-     enable = true;
-     withUWSM = true;
+    enable = true;
+    withUWSM = true;
   };
 
   programs.zsh.enable = true;
@@ -94,7 +91,7 @@
     enable = true;
     powerOnBoot = true;
   };
-  
+
   nix.gc = {
     automatic = true;
     dates = "weekly";

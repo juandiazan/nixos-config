@@ -5,12 +5,17 @@
          url = "github:nix-community/home-manager";
          inputs.nixpkgs.follows = "nixpkgs";
       };
+      nur = {
+         url = "github:nix-community/NUR";
+         inputs.nixpkgs.follows = "nixpkgs";
+      };
    };
 
-   outputs = { nixpkgs, home-manager, ... }: {
+   outputs = { nixpkgs, home-manager, nur, ... }: {
       nixosConfigurations.nixos-laptop = nixpkgs.lib.nixosSystem {
          system = "x86_64-linux";
-         modules = [ 
+         modules = [
+            { nixpkgs.overlays = [ nur.overlays.default ]; }
             ./configuration.nix
 	    home-manager.nixosModules.home-manager
 	    { 
