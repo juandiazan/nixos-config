@@ -1,0 +1,262 @@
+@define-color bg #0b011c;
+@define-color black #0f1015;
+@define-color text #f8eddb;
+
+@define-color teal #55d4b2;
+@define-color cyan #058f8f;
+@define-color red #c5052a;
+@define-color blue #083f84;
+@define-color muted-red #7e282e;
+@define-color pink #e1476d;
+@define-color violet #704bb6;
+
+@define-color teal-light #ccf2e8;
+@define-color red-light #e28295;
+@define-color blue-light #6b8cb5;
+@define-color cyan-light #50b1b1;
+@define-color violet-light #b8a5db;
+
+* {
+    all: unset;
+    font-family: "GoMono Nerd Font", monospace;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+window#waybar {
+    background-color: alpha(@bg, 0.65);
+}
+
+tooltip {
+    background-color: @black;
+    border: 2px solid @cyan;
+    border-radius: 10px;
+}
+
+tooltip label {
+    padding: 2px;
+    color: @red;
+}
+
+/*
+=================================
+========= MODULES LEFT ==========
+=================================
+*/
+
+#workspaces button {
+    color: @cyan;
+    padding: 5px;
+    transition: all 200ms ease-in-out;
+}
+
+#workspaces button:hover {
+    border-radius: 10px;
+    background-color: alpha(@text, 0.1);
+}
+
+#workspaces button.active {
+    color: @red;
+    border-radius: 20px;
+    border-bottom: 4px;
+    text-shadow: 0 0 4px @red;
+    border-top: 3px solid @cyan;
+    border-bottom: 3px solid @cyan;
+}
+
+#workspaces button.empty:not(.active) {
+    color: alpha(@cyan, 0.3);
+}
+
+/* TASKBAR */
+
+#taskbar button {
+    padding: 5px;
+}
+
+#taskbar button.active {
+    border-radius: 7px;
+    border-left: 3px solid @teal;
+    border-right: 3px solid @red;
+
+    border-top: 3px solid @teal;
+    border-bottom: 3px solid @red;
+}
+
+#taskbar button:hover {
+    border-radius: 7px;
+
+    background-color: alpha(@bg, 0.3);
+}
+
+/* hyprland current active window title */
+#window {
+    color: @text;
+}
+
+/*
+=================================
+========= MODULES CENTER ========
+=================================
+*/
+
+#clock {
+    color: @red;
+    border-bottom: 3px solid @red;
+    border-top: 3px solid @red;
+}
+
+#custom-distro {
+    padding-left: 4px;
+    color: @cyan;
+    border-bottom: 3px solid @cyan;
+    border-top: 3px solid @cyan;
+}
+
+#mpris {
+    color: @teal;
+    border-bottom: 3px solid @teal;
+    border-top: 3px solid @teal;
+}
+
+#mpris.paused {
+    color: @red;
+    border-bottom: 3px solid @red;
+    border-top: 3px solid @red;
+}
+
+/*
+=================================
+========= MODULES RIGHT =========
+=================================
+*/
+#custom-notification {
+    color: @violet;
+    border-top: 3px solid @violet;
+    border-bottom: 3px solid @violet;
+    padding-right: 3px;
+}
+
+#bluetooth {
+    color: @blue;
+    border-top: 3px solid @blue;
+    border-bottom: 3px solid @blue;
+}
+
+#network {
+    padding-left: 3px;
+    color: @blue;
+    border-top: 3px solid @blue;
+    border-bottom: 3px solid @blue;
+}
+
+#pulseaudio {
+    color: @text;
+    border-top: 3px solid @text;
+    border-bottom: 3px solid @text;
+}
+
+#cpu {
+    color: @red;
+    border-top: 3px solid @red;
+    border-bottom: 3px solid @red;
+}
+
+#cpu:hover {
+    color: @red-light;
+    border-top: 3px solid @red-light;
+    border-bottom: 3px solid @red-light;
+    transition: all 150ms ease-in-out;
+}
+
+#memory {
+    color: @cyan;
+    border-top: 3px solid @cyan;
+    border-bottom: 3px solid @cyan;
+}
+
+#memory:hover {
+    color: @cyan-light;
+    border-top: 3px solid @cyan-light;
+    border-bottom: 3px solid @cyan-light;
+    transition: all 150ms ease-in-out;
+
+}
+
+#disk {
+    color: @teal;
+    border-top: 3px solid @teal;
+    border-bottom: 3px solid @teal;
+}
+
+#disk:hover {
+    color: @teal-light;
+    border-bottom: 3px solid @teal-light;
+    border-top: 3px solid @teal-light;
+    transition: all 150ms ease-in-out;
+}
+
+#idle_inhibitor.deactivated {
+    color: @red;
+    border-top: 3px solid @red;
+    border-bottom: 3px solid @red;
+}
+
+#idle_inhibitor.deactivated:hover {
+    color: @red-light;
+    border-bottom: 3px solid @red-light;
+    border-top: 3px solid @red-light;
+    transition: all 150ms ease-in-out;
+}
+
+#idle_inhibitor.activated {
+    color: @teal;
+    border-top: 3px solid @teal;
+    border-bottom: 3px solid @teal;
+}
+
+#idle_inhibitor.activated:hover {
+    color: @teal-light;
+    border-bottom: 3px solid @teal-light;
+    border-top: 3px solid @teal-light;
+    transition: all 150ms ease-in-out;
+}
+
+#language {
+    color: @violet;
+    border-top: 3px solid @violet;
+    border-bottom: 3px solid @violet;
+}
+
+#language:hover {
+    color: @violet-light;
+    border-top: 3px solid @violet-light;
+    border-bottom: 3px solid @violet-light;
+    transition: all 150ms ease-in-out;
+}
+
+#custom-settings {
+    padding-left: 4px;
+    color: @cyan;
+    border-top: 3px solid @cyan;
+    border-bottom: 3px solid @cyan;
+}
+
+#custom-settings:hover {
+    color: @cyan-light;
+    border-top: 3px solid @cyan-light;
+    border-bottom: 3px solid @cyan-light;
+    transition: all 150ms ease-in-out;
+}
+
+#battery {
+    color: @teal;
+    border-top: 3px solid @teal;
+    border-bottom: 3px solid @teal;
+}
+
+#battery:hover {
+    color: @teal-light;
+    border-top: 3px solid @teal-light;
+    border-bottom: 3px solid @teal-light;
+}

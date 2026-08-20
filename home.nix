@@ -9,6 +9,7 @@
     ./modules/dev-tools.nix
     ./modules/browser/firefox.nix
     ./modules/kitty.nix
+    ./modules/waybar/waybar.nix
     ./modules/shell/zsh.nix
     ./modules/shell/aliases.nix
     ./modules/tmux.nix
@@ -41,7 +42,6 @@
     hyprshutdown
 
     # specific software
-    waybar
     rofi
     eza
     bat
