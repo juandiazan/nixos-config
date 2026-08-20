@@ -4,6 +4,10 @@
     toolbar = true;
     bookmarks = [
       {
+        name = "NixOS Package Search";
+        url = "https://search.nixos.org/packages";
+      }
+      {
         name = "GitHub";
         url = "https://github.com/";
       }
