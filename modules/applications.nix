@@ -12,5 +12,7 @@
     btop
     bluetui
     wiremix
+
+    libnotify # notify-send, used by scripts (e.g. brightness.sh)
   ];
 }

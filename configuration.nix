@@ -58,7 +58,8 @@
   users.users."juani" = {
     isNormalUser = true;
     description = "Juan";
-    extraGroups = ["networkmanager" "wheel"];
+    # "video" grants write access to /sys/class/backlight via brightnessctl's udev rule
+    extraGroups = ["networkmanager" "wheel" "video"];
     packages = with pkgs; [
       kdePackages.kate
       #  thunderbird
@@ -73,7 +74,12 @@
     wget
     git
     bat
+    brightnessctl
   ];
+
+  # Installs brightnessctl's udev rule so the "video" group can write
+  # brightness without root (see users.users.juani.extraGroups above)
+  services.udev.packages = [pkgs.brightnessctl];
 
   system.stateVersion = "26.05"; # Did you read the comment?
 
