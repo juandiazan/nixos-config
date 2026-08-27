@@ -252,7 +252,7 @@
           format = "{icon} {capacity}%";
           format-discharging = "{icon} {capacity}%";
           format-charging = "{icon} {capacity}%";
-          format-plugged = " {capacity}%";
+          format-plugged = " {capacity}%";
           format-icons = {
             charging = [
               "󰢜"
