@@ -6,7 +6,7 @@
     codhere = "codium .";
     rebuild = "sudo nixos-rebuild switch --flake ~/nixos-config#nixos-laptop";
     update = "sudo nix flake update --flake ~/nixos-config";
-    enc = "nvim ~/nixos-config/";
+    enc = "tmux new-session -A -s nixos-config -c ~/nixos-config nvim .";
     ".." = "cd ..";
   };
 }
