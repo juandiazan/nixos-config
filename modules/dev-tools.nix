@@ -1,11 +1,18 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   home.packages = with pkgs; [
-    vscodium
-    lazygit
     docker
-    lazydocker
+    awscli2
+
     tmux
+    lazygit
+    lazydocker
+    posting
     claude-code
+
+    vscodium
   ];
 }

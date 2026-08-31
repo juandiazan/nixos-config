@@ -15,7 +15,7 @@
     btop
     bluetui
     wiremix
-    libreoffice-fresh
+    libreoffice-stable
 
     libnotify # notify-send, used by scripts (e.g. brightness.sh)
   ];
