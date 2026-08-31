@@ -10,6 +10,7 @@
     tmux
     lazygit
     lazydocker
+    lazysql
     posting
     claude-code
 
