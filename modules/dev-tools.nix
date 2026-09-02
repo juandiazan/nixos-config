@@ -15,5 +15,8 @@
     claude-code
 
     vscodium
+    jetbrains.rider
+    dbeaver-bin
+    quickshell
   ];
 }

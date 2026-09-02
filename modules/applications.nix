@@ -18,6 +18,7 @@
     spotify-player
 
     libreoffice-stable
+    zoom-us
 
     libnotify # notify-send, used by scripts (e.g. brightness.sh)
   ];
