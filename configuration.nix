@@ -59,12 +59,14 @@
     isNormalUser = true;
     description = "Juan";
     # "video" grants write access to /sys/class/backlight via brightnessctl's udev rule
-    extraGroups = ["networkmanager" "wheel" "video"];
+    extraGroups = ["networkmanager" "wheel" "video" "vboxusers"];
     packages = with pkgs; [
       kdePackages.kate
       #  thunderbird
     ];
   };
+
+  virtualisation.virtualbox.host.enable = true;
 
   nixpkgs.config.allowUnfree = true;
 
