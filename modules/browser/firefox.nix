@@ -34,8 +34,11 @@
         "browser.newtabpage.activity-stream.feeds.topsites" = false;
 
         "privacy.sanitize.sanitizeOnShutdown" = true;
-        "privacy.clearOnShutdown_v2.browsingHistoryAndDownloads" = false;
+        "privacy.clearOnShutdown_v2.browsingHistoryAndDownloads" = true;
+        "privacy.clearOnShutdown_v2.cache" = true;
+        "privacy.clearOnShutdown_v2.cookiesAndStorage" = false; # cookie auto-delete extension manages this
         "privacy.clearOnShutdown_v2.formdata" = true;
+        "privacy.clearOnShutdown_v2.siteSettings" = true;
 
         "sidebar.visibility" = "always-show";
 
