@@ -4,14 +4,15 @@
   ...
 }: {
   imports = [
-    ./modules/git.nix
-    ./modules/applications.nix
-    ./modules/dev-tools.nix
     ./modules/browser/firefox.nix
-    ./modules/kitty.nix
     ./modules/waybar/waybar.nix
     ./modules/shell/zsh.nix
     ./modules/shell/aliases.nix
+    ./modules/software/applications.nix
+    ./modules/software/dev-tools.nix
+
+    ./modules/git.nix
+    ./modules/kitty.nix
     ./modules/tmux.nix
     ./modules/starship.nix
     ./modules/neovim.nix

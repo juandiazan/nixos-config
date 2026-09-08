@@ -7,7 +7,6 @@
     docker
     awscli2
 
-    tmux
     lazygit
     lazydocker
     lazysql
