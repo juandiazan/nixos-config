@@ -3,21 +3,14 @@
   pkgs,
   ...
 }: {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
-  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = "nixos-laptop";
+  boot.loader.systemd-boot.configurationLimit = 10;
 
   networking.networkmanager.enable = true;
 
   time.timeZone = "America/Montevideo";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -32,17 +25,13 @@
     LC_TIME = "es_UY.UTF-8";
   };
 
-  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
 
-  # Configure console keymap
   console.keyMap = "la-latin1";
 
-  # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -52,17 +41,12 @@
     pulse.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   users.users."juani" = {
     isNormalUser = true;
     description = "Juan";
-    # "video" grants write access to /sys/class/backlight via brightnessctl's udev rule
-    extraGroups = ["networkmanager" "wheel" "video" "vboxusers"];
+    extraGroups = ["networkmanager" "wheel" "vboxusers"];
     packages = with pkgs; [
       kdePackages.kate
-      #  thunderbird
     ];
   };
 
@@ -70,20 +54,14 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     wget
     git
     bat
-    brightnessctl
   ];
 
-  # Installs brightnessctl's udev rule so the "video" group can write
-  # brightness without root (see users.users.juani.extraGroups above)
-  services.udev.packages = [pkgs.brightnessctl];
-
-  system.stateVersion = "26.05"; # Did you read the comment?
+  system.stateVersion = "26.05";
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
@@ -105,6 +83,4 @@
     dates = "weekly";
     options = "--delete-older-than 14d";
   };
-
-  boot.loader.systemd-boot.configurationLimit = 10;
 }
