@@ -16,7 +16,9 @@
     vscodium
     jetbrains.rider
     dbeaver-bin
+
     direnv
+    devenv
 
     quickshell
   ];
