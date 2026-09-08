@@ -3,9 +3,16 @@
   pkgs,
   ...
 }: {
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 10;
+      };
+
+      efi.canTouchEfiVariables = true;
+    };
+  };
 
   networking.networkmanager.enable = true;
 
@@ -25,8 +32,10 @@
     LC_TIME = "es_UY.UTF-8";
   };
 
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services = {
+    displayManager.sddm.enable = true;
+    desktopManager.plasma6.enable = true;
+  };
 
   console.keyMap = "la-latin1";
 
