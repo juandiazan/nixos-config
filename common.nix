@@ -53,13 +53,16 @@
   users.users."juani" = {
     isNormalUser = true;
     description = "Juan";
-    extraGroups = ["networkmanager" "wheel" "vboxusers"];
+    extraGroups = ["networkmanager" "wheel" "vboxusers" "docker"];
     packages = with pkgs; [
       kdePackages.kate
     ];
   };
 
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation = {
+    docker.enable = true;
+    virtualbox.host.enable = true;
+  };
 
   nixpkgs.config.allowUnfree = true;
 
