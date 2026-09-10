@@ -18,51 +18,54 @@
 
   time.timeZone = "America/Montevideo";
 
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "es_UY.UTF-8";
-    LC_IDENTIFICATION = "es_UY.UTF-8";
-    LC_MEASUREMENT = "es_UY.UTF-8";
-    LC_MONETARY = "es_UY.UTF-8";
-    LC_NAME = "es_UY.UTF-8";
-    LC_NUMERIC = "es_UY.UTF-8";
-    LC_PAPER = "es_UY.UTF-8";
-    LC_TELEPHONE = "es_UY.UTF-8";
-    LC_TIME = "es_UY.UTF-8";
+  i18n = {
+    defaultLocale = "en_US.UTF-8";
+    supportedLocales = [
+      "en_US.UTF-8/UTF-8"
+      "es_UY.UTF-8/UTF-8"
+      "en_GB.UTF-8/UTF-8"
+    ];
+    extraLocaleSettings = {
+      LC_ADDRESS = "es_UY.UTF-8";
+      LC_IDENTIFICATION = "es_UY.UTF-8";
+      LC_MEASUREMENT = "es_UY.UTF-8";
+      LC_MONETARY = "es_UY.UTF-8";
+      LC_NAME = "es_UY.UTF-8";
+      LC_NUMERIC = "es_UY.UTF-8";
+      LC_PAPER = "es_UY.UTF-8";
+      LC_TELEPHONE = "es_UY.UTF-8";
+      LC_TIME = "es_UY.UTF-8";
+    };
   };
 
-  i18n.supportedLocales = [
-    "en_US.UTF-8/UTF-8"
-    "es_UY.UTF-8/UTF-8"
-    "en_GB.UTF-8/UTF-8"
-  ];
-
   services = {
-    displayManager.sddm.enable = true;
-    desktopManager.plasma6.enable = true;
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    printing.enable = true;
+
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = true;
+    };
+    udisks2.enable = true;
+    upower.enable = true;
   };
 
   console.keyMap = "la-latin1";
 
-  services.printing.enable = true;
-
-  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
-  users.users."juani" = {
+  users.users.juani = {
     isNormalUser = true;
     description = "Juan";
     extraGroups = ["networkmanager" "wheel" "vboxusers" "docker"];
-    packages = with pkgs; [
-      kdePackages.kate
-    ];
+    shell = pkgs.zsh;
   };
 
   virtualisation = {
@@ -81,24 +84,26 @@
 
   system.stateVersion = "26.05";
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
-
-  programs.hyprland = {
-    enable = true;
-    withUWSM = true;
+  nix = {
+    settings.experimental-features = ["nix-command" "flakes"];
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 14d";
+    };
   };
 
-  programs.zsh.enable = true;
-  users.users.juani.shell = pkgs.zsh;
+  programs = {
+    hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
+
+    zsh.enable = true;
+  };
 
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
-  };
-
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 14d";
   };
 }
