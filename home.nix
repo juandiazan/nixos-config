@@ -34,6 +34,15 @@
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
 
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 24;
+    gtk.enable = true;
+    hyprcursor.enable = true;
+  };
+
   home.packages = with pkgs; [
     # customization
     nerd-fonts.go-mono
