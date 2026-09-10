@@ -15,7 +15,7 @@
     btop
     bluetui
     wiremix
-    spotify-player
+    kew
 
     libreoffice-stable
     zoom-us
