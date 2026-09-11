@@ -52,6 +52,7 @@
     displayManager.sddm = {
       enable = true;
       wayland.enable = true;
+      theme = "catppuccin-mocha-teal";
     };
     udisks2.enable = true;
     upower.enable = true;
@@ -80,6 +81,12 @@
     wget
     git
     bat
+    (catppuccin-sddm.override {
+      flavor = "mocha";
+      accent = "teal";
+      loginBackground = true;
+      background = ./assets/sddm-bg.jpg;
+    })
   ];
 
   system.stateVersion = "26.05";
