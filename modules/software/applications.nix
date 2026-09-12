@@ -11,11 +11,14 @@
     spotify
     localsend
     nautilus
+    loupe
+    vlc
 
     btop
     bluetui
     wiremix
     kew
+    imv
 
     libreoffice-stable
     zoom-us
