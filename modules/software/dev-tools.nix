@@ -6,6 +6,7 @@
   home.packages = with pkgs; [
     docker
     awscli2
+    gh
 
     lazygit
     lazydocker
