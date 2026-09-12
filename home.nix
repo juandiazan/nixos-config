@@ -34,6 +34,12 @@
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+    setSessionVariables = true;
+  };
+
   home.pointerCursor = {
     enable = true;
     package = pkgs.bibata-cursors;
@@ -51,6 +57,7 @@
     # hyprland stack
     hyprshot
     hyprshutdown
+    hyprpolkitagent
 
     # specific software
     rofi
