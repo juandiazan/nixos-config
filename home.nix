@@ -8,9 +8,9 @@
     ./modules/waybar/waybar.nix
     ./modules/shell/zsh.nix
     ./modules/shell/aliases.nix
-    ./modules/software/applications.nix
-    ./modules/software/dev-tools.nix
-    ./modules/software/cdrip/cdrip.nix
+    ./modules/packages/apps.nix
+    ./modules/packages/dev-tools.nix
+    ./modules/cdrip/cdrip.nix
 
     ./modules/git.nix
     ./modules/kitty.nix
