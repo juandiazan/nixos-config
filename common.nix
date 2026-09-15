@@ -85,7 +85,7 @@
       flavor = "mocha";
       accent = "teal";
       loginBackground = true;
-      background = ./assets/sddm-bg.jpg;
+      background = ./assets/bgs/sddm-bg.jpg;
     })
   ];
 

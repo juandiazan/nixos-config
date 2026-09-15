@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./modules/browser/firefox.nix
+    ./modules/firefox/firefox.nix
     ./modules/waybar/waybar.nix
     ./modules/shell/zsh.nix
     ./modules/shell/aliases.nix
@@ -19,10 +19,10 @@
     ./modules/neovim.nix
 
     # hyprland stack
-    ./modules/hyprpaper.nix
-    ./modules/hypridle.nix
-    ./modules/hyprsunset.nix
-    ./modules/hyprlock.nix
+    ./modules/hypr/hyprpaper.nix
+    ./modules/hypr/hypridle.nix
+    ./modules/hypr/hyprsunset.nix
+    ./modules/hypr/hyprlock.nix
   ];
 
   home = {

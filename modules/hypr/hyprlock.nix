@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.hyprlock = {
     enable = true;
 
@@ -10,7 +13,7 @@
       background = [
         {
           monitor = "eDP-1";
-          path = "~/dotfiles/img/bgs/lockscreenbg.jpg";
+          path = "~/nixos-config/assets/bgs/lockscreenbg.jpg";
           color = "rgba(25, 20, 20, 1.0)";
           blur_passes = 2;
           contrast = 1;
