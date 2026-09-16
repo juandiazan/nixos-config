@@ -17,6 +17,7 @@
     ./modules/tmux.nix
     ./modules/starship.nix
     ./modules/neovim.nix
+    ./modules/rofi.nix
 
     # hyprland stack
     ./modules/hypr/hyprpaper.nix
@@ -60,7 +61,6 @@
     hyprpolkitagent
 
     # specific software
-    rofi
     eza
     bat
     pulseaudio
