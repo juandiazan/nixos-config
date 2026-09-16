@@ -13,7 +13,7 @@
       background = [
         {
           monitor = "eDP-1";
-          path = "~/nixos-config/assets/bgs/lockscreenbg.jpg";
+          path = "./assets/bgs/glass-beach-2.jpg";
           color = "rgba(25, 20, 20, 1.0)";
           blur_passes = 2;
           contrast = 1;

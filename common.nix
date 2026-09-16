@@ -10,7 +10,7 @@
         maxGenerations = 10;
 
         style = {
-          wallpapers = [./assets/bgs/sddm-limine-bg.jpg];
+          wallpapers = [./assets/bgs/glass-beach-2.jpg];
           wallpaperStyle = "stretched";
           backdrop = "0b011c";
 
@@ -104,7 +104,7 @@
       flavor = "mocha";
       accent = "teal";
       loginBackground = true;
-      background = ./assets/bgs/sddm-limine-bg.jpg;
+      background = ./assets/bgs/glass-beach-2.jpg;
     })
   ];
 
