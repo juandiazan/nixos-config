@@ -99,6 +99,10 @@
             name = "Nerd Fonts Icons";
             url = "https://www.nerdfonts.com/cheat-sheet";
           }
+          {
+            name = "Privacy Tools";
+            url = "https://privacytools.io/";
+          }
         ];
       }
     ];
