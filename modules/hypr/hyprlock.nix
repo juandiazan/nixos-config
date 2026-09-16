@@ -2,7 +2,9 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  glassBeach2 = ../../assets/bgs/glass-beach-2.jpg;
+in {
   programs.hyprlock = {
     enable = true;
 
@@ -13,7 +15,7 @@
       background = [
         {
           monitor = "eDP-1";
-          path = "./assets/bgs/glass-beach-2.jpg";
+          path = "${glassBeach2}";
           color = "rgba(25, 20, 20, 1.0)";
           blur_passes = 2;
           contrast = 1;

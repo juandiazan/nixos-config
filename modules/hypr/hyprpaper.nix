@@ -2,22 +2,29 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  glassBeach = ../../assets/bgs/glass-beach-1.png;
+  metropolis = ../../assets/bgs/metropolis.png;
+in {
   services.hyprpaper = {
     enable = true;
     settings = {
       preload = [
-        "~/dotfiles/img/bgs/screen1bg.png"
-        "~/dotfiles/img/bgs/screen2bg.png"
+        "${glassBeach}"
+        "${metropolis}"
       ];
       wallpaper = [
         {
           monitor = "eDP-1";
-          path = "~/nixos-config/assets/bgs/screen1bg.png";
+          path = "${glassBeach}";
+        }
+        {
+          monitor = "HDMI-A-1";
+          path = "${glassBeach}";
         }
         {
           monitor = "";
-          path = "~/nixos-config/assets/bgs/screen2bg.png";
+          path = "${metropolis}";
         }
       ];
     };
