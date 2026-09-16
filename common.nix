@@ -5,10 +5,29 @@
 }: {
   boot = {
     loader = {
-      systemd-boot = {
+      limine = {
         enable = true;
-        configurationLimit = 10;
+        maxGenerations = 10;
+
+        style = {
+          wallpapers = [./assets/bgs/sddm-bg.jpg];
+          wallpaperStyle = "stretched";
+          backdrop = "0b011c";
+
+          interface = {
+            brandingColor = "55d4b2";
+            helpColor = "058f8f";
+            helpColorBright = "55d4b2";
+          };
+
+          graphicalTerminal = {
+            foreground = "feffe0";
+            palette = "16141e;ed7481;54b99d;e0c750;6ee4de;ca476a;c5052a;f1f1f1";
+            brightPalette = "4a5060;f0a2a3;a0c180;f5e47d;abfcf3;cc75d0;ed7481;fefefe";
+          };
+        };
       };
+      systemd-boot.enable = false;
 
       efi.canTouchEfiVariables = true;
     };
