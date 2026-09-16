@@ -11,8 +11,12 @@
     spotify
     localsend
     nautilus
-    loupe
+    loupe # image viewer
     vlc
+    pinta
+
+    zoom-us
+    libreoffice-stable
 
     btop
     bluetui
@@ -20,9 +24,6 @@
     kew
     imv
 
-    libreoffice-stable
-    zoom-us
-
-    libnotify # notify-send, used by scripts (e.g. brightness.sh)
+    libnotify # notify-send
   ];
 }
