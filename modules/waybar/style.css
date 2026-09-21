@@ -1,20 +1,4 @@
-@define-color bg #0b011c;
-@define-color black #0f1015;
-@define-color text #f8eddb;
-
-@define-color teal #55d4b2;
-@define-color cyan #058f8f;
-@define-color red #c5052a;
-@define-color blue #083f84;
-@define-color muted-red #7e282e;
-@define-color pink #e1476d;
-@define-color violet #704bb6;
-
-@define-color teal-light #ccf2e8;
-@define-color red-light #e28295;
-@define-color blue-light #6b8cb5;
-@define-color cyan-light #50b1b1;
-@define-color violet-light #b8a5db;
+/* @define-color palette is prepended by waybar.nix from themes/glassbeach.nix */
 
 * {
     all: unset;

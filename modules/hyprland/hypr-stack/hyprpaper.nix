@@ -3,8 +3,8 @@
   pkgs,
   ...
 }: let
-  glassBeach = ../../assets/bgs/glass-beach-1.png;
-  metropolis = ../../assets/bgs/metropolis.png;
+  glassBeach = ../../../assets/bgs/glass-beach-1.png;
+  metropolis = ../../../assets/bgs/metropolis.png;
 in {
   services.hyprpaper = {
     enable = true;

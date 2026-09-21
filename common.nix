@@ -1,8 +1,14 @@
 {
   config,
   pkgs,
+  lib,
   ...
-}: {
+}: let
+  theme = import ./modules/themes/glassbeach.nix;
+  t = theme.terminal;
+
+  ansi = colors: lib.concatMapStringsSep ";" theme.hex colors;
+in {
   boot = {
     loader = {
       limine = {
@@ -12,18 +18,18 @@
         style = {
           wallpapers = [./assets/bgs/glass-beach-2.jpg];
           wallpaperStyle = "stretched";
-          backdrop = "0b011c";
+          backdrop = theme.hex theme.bg;
 
           interface = {
-            brandingColor = "55d4b2";
-            helpColor = "058f8f";
-            helpColorBright = "55d4b2";
+            brandingColor = theme.hex theme.teal;
+            helpColor = theme.hex theme.cyan;
+            helpColorBright = theme.hex theme.teal;
           };
 
           graphicalTerminal = {
-            foreground = "feffe0";
-            palette = "16141e;ed7481;54b99d;e0c750;6ee4de;ca476a;c5052a;f1f1f1";
-            brightPalette = "4a5060;f0a2a3;a0c180;f5e47d;abfcf3;cc75d0;ed7481;fefefe";
+            foreground = theme.hex t.foreground;
+            palette = ansi [t.black t.red t.green t.yellow t.blue t.magenta t.cyan t.white];
+            brightPalette = ansi [t.brightBlack t.brightRed t.brightGreen t.brightYellow t.brightBlue t.brightMagenta t.brightCyan t.brightWhite];
           };
         };
       };

@@ -23,7 +23,10 @@
     wiremix
     kew
     imv
+    yazi
 
     libnotify # notify-send
+    playerctl # waybar mpris, hyprlock song label, media keys
+    hyprpicker # SUPER+C
   ];
 }

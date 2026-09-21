@@ -1,8 +1,36 @@
 {
   config,
   pkgs,
+  lib,
   ...
-}: {
+}: let
+  theme = import ../themes/glassbeach.nix;
+
+  # GTK CSS colour names exposed to style.css
+  cssColors = {
+    bg = theme.bg;
+    black = theme.black;
+    text = theme.text;
+
+    teal = theme.teal;
+    cyan = theme.cyan;
+    red = theme.red;
+    blue = theme.blue;
+    muted-red = theme.mutedRed;
+    pink = theme.pink;
+    violet = theme.violet;
+
+    teal-light = theme.tealLight;
+    red-light = theme.redLight;
+    blue-light = theme.blueLight;
+    cyan-light = theme.cyanLight;
+    violet-light = theme.violetLight;
+  };
+
+  defineColors = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "@define-color ${name} ${value};") cssColors);
+
+  calendarSpan = color: "<span color='${color}'><b>{}</b></span>";
+in {
   programs.waybar = {
     enable = true;
 
@@ -88,11 +116,11 @@
             weeks-pos = "right";
             on-scroll = 1;
             format = {
-              months = "<span color='#c91629'><b>{}</b></span>"; # red
-              days = "<span color='#fbf0de'><b>{}</b></span>"; # white
-              weeks = "<span color='#55d4b2'><b>W{}</b></span>"; # light teal
-              weekdays = "<span color='#249d9d'><b>{}</b></span>"; # dark teal
-              today = "<span color='#e35473'><b><u>{}</u></b></span>"; # pink
+              months = calendarSpan theme.red;
+              days = calendarSpan theme.text;
+              weeks = "<span color='${theme.teal}'><b>W{}</b></span>";
+              weekdays = calendarSpan theme.cyan;
+              today = "<span color='${theme.pink}'><b><u>{}</u></b></span>";
             };
           };
           actions = {
@@ -291,6 +319,6 @@
       };
     };
 
-    style = builtins.readFile ./style.css;
+    style = defineColors + "\n\n" + builtins.readFile ./style.css;
   };
 }

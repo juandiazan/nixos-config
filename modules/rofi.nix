@@ -4,7 +4,10 @@
   ...
 }: let
   inherit (config.lib.formats.rasi) mkLiteral;
+  theme = import ./themes/glassbeach.nix;
   cube = ../assets/extra/cube.png;
+
+  color = c: alpha: mkLiteral (theme.withAlpha c alpha);
 in {
   programs.rofi = {
     enable = true;
@@ -21,13 +24,13 @@ in {
     theme = {
       "*" = {
         font = "GoMono Nerd Font 10";
-        background = mkLiteral "#021B21A6";
-        background-alt = mkLiteral "#0C252BCC";
-        foreground = mkLiteral "#fbf0deFF";
-        selected = mkLiteral "#249d9dFF";
-        active = mkLiteral "#55d4b2FF";
-        urgent = mkLiteral "#C2454EFF";
-        red = mkLiteral "#c91629FF";
+        background = color theme.bg "A6";
+        background-alt = color theme.black "CC";
+        foreground = color theme.text "FF";
+        selected = color theme.cyan "FF";
+        active = color theme.teal "FF";
+        urgent = color theme.mutedRed "FF";
+        red = color theme.red "FF";
       };
 
       window = {

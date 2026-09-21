@@ -1,5 +1,10 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: let
+  theme = import ./themes/glassbeach.nix;
+in {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -11,14 +16,14 @@
       palette = "custom";
 
       palettes.custom = {
-        color_teal = "#55d4b2";
-        color_cyan = "#058f8f";
-        color_red_main = "#c5052a";
-        color_magenta = "#704bb6";
-        color_black = "#0b011c";
-        color_white = "#f8eddb";
-        color_bg1 = "#3c3836";
-        color_bg3 = "#665c54";
+        color_teal = theme.teal;
+        color_cyan = theme.cyan;
+        color_red_main = theme.red;
+        color_magenta = theme.violet;
+        color_black = theme.bg;
+        color_white = theme.text;
+        color_bg1 = theme.bg1;
+        color_bg3 = theme.bg3;
       };
 
       os = {

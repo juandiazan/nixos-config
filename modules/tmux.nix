@@ -1,5 +1,10 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: let
+  theme = import ./themes/glassbeach.nix;
+in {
   programs.tmux = {
     enable = true;
 
@@ -51,15 +56,15 @@
       # THEMING
       # -------
 
-      thm_bg="#0b011c"
-      thm_fg="#f8eddb"
-      thm_cyan="#058f8f"
-      thm_black="#0f1015"
-      thm_gray="#3a3f5a"
-      thm_teal="#55d4b2"
-      thm_pink="#e1476d"
-      thm_red="#c5052a"
-      thm_blue="#083f84"
+      thm_bg="${theme.bg}"
+      thm_fg="${theme.text}"
+      thm_cyan="${theme.cyan}"
+      thm_black="${theme.black}"
+      thm_gray="${theme.gray}"
+      thm_teal="${theme.teal}"
+      thm_pink="${theme.pink}"
+      thm_red="${theme.red}"
+      thm_blue="${theme.blue}"
 
       # Status bar
       set -g status "on"

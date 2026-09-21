@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   services.hyprsunset = {
     enable = true;
     settings = {
@@ -10,7 +13,7 @@
         }
         {
           time = "20:00";
-          identity = true;
+          temperature = 4000;
           gamma = "0.8";
         }
       ];

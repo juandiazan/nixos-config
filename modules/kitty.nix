@@ -1,5 +1,11 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: let
+  theme = import ./themes/glassbeach.nix;
+  t = theme.terminal;
+in {
   programs.kitty = {
     enable = true;
 
@@ -29,54 +35,46 @@
       cursor_trail_start_threshold = 2;
 
       # theme
-      foreground = "#feffe0";
-      background = "#181321";
-      selection_foreground = "#f4f4f4";
-      selection_background = "#1e0623";
+      foreground = t.foreground;
+      background = t.background;
+      selection_foreground = t.selectionForeground;
+      selection_background = t.selectionBackground;
 
-      cursor = "#d28133";
-      cursor_text_color = "#fefefe";
+      cursor = t.cursor;
+      cursor_text_color = t.brightWhite;
 
-      url_color = "#ea9649";
+      url_color = t.url;
 
-      active_border_color = "#54b99d";
-      inactive_border_color = "#171320";
-      bell_border_color = "#f0a2a3";
+      active_border_color = t.green;
+      inactive_border_color = t.surface;
+      bell_border_color = t.brightRed;
       visual_bell_color = "none";
 
-      wayland_titlebar_color = "#1e1e2e";
-      macos_titlebar_color = "#1e1e2e";
+      wayland_titlebar_color = t.titlebar;
+      macos_titlebar_color = t.titlebar;
 
-      active_tab_foreground = "#feffe0";
-      active_tab_background = "#171320";
-      inactive_tab_foreground = "#4a5060";
-      inactive_tab_background = "#171320";
-      tab_bar_background = "#171320";
+      active_tab_foreground = t.foreground;
+      active_tab_background = t.surface;
+      inactive_tab_foreground = t.brightBlack;
+      inactive_tab_background = t.surface;
+      tab_bar_background = t.surface;
 
-      # black
-      color0 = "#16141e";
-      color8 = "#4a5060";
-      # red
-      color1 = "#ed7481";
-      color9 = "#f0a2a3";
-      # green
-      color2 = "#54b99d";
-      color10 = "#a0c180";
-      # yellow
-      color3 = "#e0c750";
-      color11 = "#f5e47d";
-      # blue
-      color4 = "#6ee4de";
-      color12 = "#abfcf3";
-      # magenta
-      color5 = "#ca476a";
-      color13 = "#cc75d0";
-      # cyan
-      color6 = "#6fb3bf";
-      color14 = "#c7f1fc";
-      # white
-      color7 = "#f1f1f1";
-      color15 = "#fefefe";
+      color0 = t.black;
+      color8 = t.brightBlack;
+      color1 = t.red;
+      color9 = t.brightRed;
+      color2 = t.green;
+      color10 = t.brightGreen;
+      color3 = t.yellow;
+      color11 = t.brightYellow;
+      color4 = t.blue;
+      color12 = t.brightBlue;
+      color5 = t.magenta;
+      color13 = t.brightMagenta;
+      color6 = t.cyan;
+      color14 = t.brightCyan;
+      color7 = t.white;
+      color15 = t.brightWhite;
     };
   };
 }

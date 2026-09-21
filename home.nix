@@ -20,10 +20,11 @@
     ./modules/rofi.nix
 
     # hyprland stack
-    ./modules/hypr/hyprpaper.nix
-    ./modules/hypr/hypridle.nix
-    ./modules/hypr/hyprsunset.nix
-    ./modules/hypr/hyprlock.nix
+    ./modules/hyprland/hyprland.nix
+    ./modules/hyprland/hypr-stack/hyprpaper.nix
+    ./modules/hyprland/hypr-stack/hypridle.nix
+    ./modules/hyprland/hypr-stack/hyprsunset.nix
+    ./modules/hyprland/hypr-stack/hyprlock.nix
   ];
 
   home = {

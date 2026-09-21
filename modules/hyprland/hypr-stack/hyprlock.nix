@@ -3,18 +3,16 @@
   pkgs,
   ...
 }: let
-  glassBeach2 = ../../assets/bgs/glass-beach-2.jpg;
+  theme = import ../../themes/glassbeach.nix;
+  glassBeach2 = ../../../assets/bgs/glass-beach-2.jpg;
 in {
   programs.hyprlock = {
     enable = true;
 
     settings = {
-      # red: rgb(201, 22, 41) | cyan: rgb(36, 157, 157) | blue: rgb(41, 44, 73)
-      # teal: rgb(85, 212, 178) | white: rgb(251, 240, 222) | bordó: rgb(165, 41, 74)
-
       background = [
         {
-          monitor = "eDP-1";
+          monitor = "";
           path = "${glassBeach2}";
           color = "rgba(25, 20, 20, 1.0)";
           blur_passes = 2;
@@ -33,9 +31,9 @@ in {
           dots_size = 0.33;
           dots_spacing = 0.15;
 
-          outer_color = "rgb(36, 157, 157)";
+          outer_color = theme.rgb theme.cyan;
           inner_color = "rgb(0, 0, 0)";
-          font_color = "rgb(201, 22, 41)";
+          font_color = theme.rgb theme.red;
 
           fade_on_empty = false;
           font_family = "GoMono Nerd Font";
@@ -52,7 +50,7 @@ in {
         {
           monitor = "";
           text = ''cmd[update:1000] echo "$(date +"%A, %B %d")"'';
-          color = "rgb(85, 212, 178)";
+          color = theme.rgb theme.teal;
           font_size = 40;
           font_family = "GoMono Nerd Font";
           position = "0, 300";
@@ -63,7 +61,7 @@ in {
         {
           monitor = "";
           text = ''cmd[update:1000] date +"%-I:%M%p"'';
-          color = "rgb(85, 212, 178)";
+          color = theme.rgb theme.teal;
           font_size = 95;
           font_family = "GoMono Nerd Font Extrabold";
           position = "0, 180";
@@ -74,7 +72,7 @@ in {
         {
           monitor = "";
           text = ''cmd[update:1000] echo "Welcome, $(whoami)"'';
-          color = "rgb(165, 41, 74)";
+          color = theme.rgb theme.pink;
           font_size = 16;
           font_family = "GoMono Nerd Font Bold";
           position = "0, 50";
@@ -85,7 +83,7 @@ in {
         {
           monitor = "";
           text = ''cmd[update:1000] echo "  $(playerctl metadata artist) - $(playerctl metadata title)"'';
-          color = "rgb(165, 41, 74)";
+          color = theme.rgb theme.pink;
           font_size = 16;
           font_family = "GoMono Nerd Font Bold";
           position = "0, 50";
