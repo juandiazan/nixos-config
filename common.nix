@@ -5,7 +5,7 @@
   ...
 }: let
   theme = import ./modules/themes/glassbeach.nix;
-  t = theme.terminal;
+  t = theme.limineTerminal;
 
   ansi = colors: lib.concatMapStringsSep ";" theme.hex colors;
 in {

@@ -60,6 +60,14 @@ in rec {
     brightWhite = "#fefefe";
   };
 
+  # boot terminal (limine): same as terminal but the cyan slot is red
+  limineTerminal =
+    terminal
+    // {
+      cyan = red;
+      brightCyan = terminal.red;
+    };
+
   hex = strip; # removes "#" from hex code
   rgb = color: "rgb(${strip color})"; # converts hex to rgb (removes "#")
   withAlpha = color: alpha: "${color}${alpha}"; # joins hex code with alpha (transparency) value
