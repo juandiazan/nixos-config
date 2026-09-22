@@ -7,6 +7,5 @@
     libnotify
     playerctl
     pulseaudio
-    swaynotificationcenter
   ];
 }

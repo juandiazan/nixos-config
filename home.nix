@@ -19,6 +19,7 @@ in {
   imports = [
     ./modules/firefox/firefox.nix
     ./modules/waybar/waybar.nix
+    ./modules/swaync/swaync.nix
     ./modules/shell/zsh.nix
     ./modules/shell/aliases.nix
     ./modules/packages/apps.nix

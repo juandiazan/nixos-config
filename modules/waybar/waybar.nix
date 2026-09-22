@@ -215,19 +215,19 @@ in {
           };
           tooltip-format = "<b>Output Device</b>: {desc} at {volume}%";
           on-click = "~/nixos-config/scripts/waybar/audio-open.sh";
-          on-click-middle = "~/nixos-config/scripts/waybar/change-audio-output.sh";
-          on-click-right = "~/nixos-config/scripts/waybar/volume.sh output mute";
-          on-scroll-up = "~/nixos-config/scripts/waybar/volume.sh output raise";
-          on-scroll-down = "~/nixos-config/scripts/waybar/volume.sh output lower";
+          on-click-middle = "~/nixos-config/scripts/change-audio-output.sh";
+          on-click-right = "~/nixos-config/scripts/volume.sh output mute";
+          on-scroll-up = "~/nixos-config/scripts/volume.sh output raise";
+          on-scroll-down = "~/nixos-config/scripts/volume.sh output lower";
         };
 
         "pulseaudio#input" = {
           format = "{format_source}";
           format-source = "󰍬";
           format-source-muted = "󰍭 ";
-          on-click = "~/nixos-config/scripts/waybar/volume.sh input mute";
-          on-scroll-up = "~/nixos-config/scripts/waybar/volume.sh input raise";
-          on-scroll-down = "~/nixos-config/scripts/waybar/volume.sh input lower";
+          on-click = "~/nixos-config/scripts/volume.sh input mute";
+          on-scroll-up = "~/nixos-config/scripts/volume.sh input raise";
+          on-scroll-down = "~/nixos-config/scripts/volume.sh input lower";
           tooltip-format = "<b>Input Device</b>: {desc} at {volume}%"; # currently does not work
         };
 
