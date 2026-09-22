@@ -10,6 +10,7 @@ hl.env("GDK_BACKEND", "wayland,x11,*")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("SDL_VIDEODRIVER", "wayland")
 hl.env("CLUTTER_BACKEND", "wayland")
+hl.env("ADW_DISABLE_PORTAL", 1)
 
 --- xdg variables
 hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
