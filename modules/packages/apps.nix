@@ -7,12 +7,12 @@
     # desktop apps
     discord
     librewolf
-    steam
     obsidian
     spotify
     localsend
     nautilus
     loupe # image viewer
+    gnome-text-editor
     vlc
     pinta
     zoom-us
@@ -32,9 +32,8 @@
     bat
 
     # hyprland
-    hyprpicker 
+    hyprpicker
     hyprshot
     hyprshutdown
-    hyprpolkitagent
   ];
 }
