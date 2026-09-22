@@ -4,6 +4,7 @@
   ...
 }: {
   home.packages = with pkgs; [
+    # desktop apps
     discord
     librewolf
     steam
@@ -14,10 +15,10 @@
     loupe # image viewer
     vlc
     pinta
-
     zoom-us
     libreoffice-stable
 
+    # TUIs
     btop
     bluetui
     wiremix
@@ -25,6 +26,15 @@
     imv
     yazi
 
-    hyprpicker # SUPER+C
+    # CLI tools
+    fastfetch
+    eza
+    bat
+
+    # hyprland
+    hyprpicker 
+    hyprshot
+    hyprshutdown
+    hyprpolkitagent
   ];
 }

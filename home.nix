@@ -2,7 +2,20 @@
   config,
   pkgs,
   ...
-}: {
+}: let
+  cursorThemes = {
+    bibata = {
+      name = "Bibata-Modern-Classic";
+      package = pkgs.bibata-cursors;
+    };
+    hackneyed = {
+      name = "Hackneyed";
+      package = pkgs.hackneyed;
+    };
+  };
+
+  cursor = cursorThemes.hackneyed;
+in {
   imports = [
     ./modules/firefox/firefox.nix
     ./modules/waybar/waybar.nix
@@ -15,13 +28,14 @@
     ./modules/cds/cds.nix
 
     ./modules/git.nix
+    ./modules/gtk.nix
     ./modules/kitty.nix
+    ./modules/nautilus.nix
     ./modules/tmux.nix
     ./modules/starship.nix
     ./modules/neovim.nix
     ./modules/rofi.nix
 
-    # hyprland stack
     ./modules/hyprland/hyprland.nix
     ./modules/hyprland/hypr-stack/hyprpaper.nix
     ./modules/hyprland/hypr-stack/hypridle.nix
@@ -45,24 +59,9 @@
 
   home.pointerCursor = {
     enable = true;
-    package = pkgs.bibata-cursors;
-    name = "Bibata-Modern-Classic";
+    inherit (cursor) name package;
     size = 24;
     gtk.enable = true;
     hyprcursor.enable = true;
   };
-
-  home.packages = with pkgs; [
-    # customization
-    fastfetch
-
-    # hyprland stack
-    hyprshot
-    hyprshutdown
-    hyprpolkitagent
-
-    # specific software
-    eza
-    bat
-  ];
 }
