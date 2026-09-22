@@ -9,6 +9,7 @@
     cddiscid
     flac
     imagemagick
+    kdePackages.k3b
   ];
 
   home.file.".abcde.conf".source = ./abcde.conf;

@@ -105,7 +105,6 @@ in {
     vim
     wget
     git
-    bat
     (catppuccin-sddm.override {
       flavor = "mocha";
       accent = "teal";

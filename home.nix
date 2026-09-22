@@ -10,7 +10,9 @@
     ./modules/shell/aliases.nix
     ./modules/packages/apps.nix
     ./modules/packages/dev-tools.nix
-    ./modules/cdrip/cdrip.nix
+    ./modules/packages/desktop.nix
+    ./modules/packages/fonts.nix
+    ./modules/cds/cds.nix
 
     ./modules/git.nix
     ./modules/kitty.nix
@@ -34,7 +36,6 @@
   };
 
   programs.home-manager.enable = true;
-  fonts.fontconfig.enable = true;
 
   xdg.userDirs = {
     enable = true;
@@ -53,7 +54,6 @@
 
   home.packages = with pkgs; [
     # customization
-    nerd-fonts.go-mono
     fastfetch
 
     # hyprland stack
@@ -64,7 +64,5 @@
     # specific software
     eza
     bat
-    pulseaudio
-    swaynotificationcenter
   ];
 }
