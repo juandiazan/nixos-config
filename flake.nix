@@ -29,6 +29,7 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
+              backupFileExtension = "bak";
               users.juani = import ./home.nix;
             };
           }

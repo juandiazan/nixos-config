@@ -4,7 +4,6 @@
   ...
 }: {
   home.packages = with pkgs; [
-    docker
     awscli2
     gh
 
@@ -18,7 +17,6 @@
     jetbrains.rider
     dbeaver-bin
 
-    direnv
     devenv
 
     quickshell

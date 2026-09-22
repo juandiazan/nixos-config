@@ -138,10 +138,21 @@ in {
     };
 
     zsh.enable = true;
+
+    steam.enable = true;
+
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
   };
 
-  hardware.bluetooth = {
-    enable = true;
-    powerOnBoot = true;
+  hardware = {
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+    };
+
+    graphics.enable32Bit = true;
   };
 }

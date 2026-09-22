@@ -35,12 +35,14 @@ in {
     ./modules/starship.nix
     ./modules/neovim.nix
     ./modules/rofi.nix
+    ./modules/mimeapps.nix
 
     ./modules/hyprland/hyprland.nix
     ./modules/hyprland/hypr-stack/hyprpaper.nix
     ./modules/hyprland/hypr-stack/hypridle.nix
     ./modules/hyprland/hypr-stack/hyprsunset.nix
     ./modules/hyprland/hypr-stack/hyprlock.nix
+    ./modules/hyprland/hypr-stack/hyprpolkitagent.nix
   ];
 
   home = {
