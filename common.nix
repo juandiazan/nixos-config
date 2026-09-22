@@ -81,6 +81,13 @@ in {
     };
     udisks2.enable = true;
     upower.enable = true;
+
+    gvfs.enable = true;
+
+    gnome = {
+      tinysparql.enable = true;
+      localsearch.enable = true;
+    };
   };
 
   console.keyMap = "la-latin1";
