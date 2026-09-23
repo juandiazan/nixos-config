@@ -17,6 +17,7 @@
     pinta
     zoom-us
     libreoffice-stable
+    obs-studio
 
     # TUIs
     btop
