@@ -8,23 +8,22 @@
 
   # GTK CSS colour names exposed to style.css
   cssColors = {
-    bg = theme.bg;
-    black = theme.black;
-    text = theme.text;
+    bg = theme.ink0;
+    black = theme.ink1;
+    text = theme.white;
 
     teal = theme.teal;
     cyan = theme.cyan;
     red = theme.red;
     blue = theme.blue;
-    muted-red = theme.mutedRed;
     pink = theme.pink;
     violet = theme.violet;
 
-    teal-light = theme.tealLight;
-    red-light = theme.redLight;
-    blue-light = theme.blueLight;
-    cyan-light = theme.cyanLight;
-    violet-light = theme.violetLight;
+    teal-light = theme.lightTeal;
+    red-light = theme.lightRed;
+    blue-light = theme.lightBlue;
+    cyan-light = theme.lightCyan;
+    violet-light = theme.lightViolet;
   };
 
   defineColors = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "@define-color ${name} ${value};") cssColors);
@@ -118,7 +117,7 @@ in {
             on-scroll = 1;
             format = {
               months = calendarSpan theme.red;
-              days = calendarSpan theme.text;
+              days = calendarSpan theme.white;
               weeks = "<span color='${theme.teal}'><b>W{}</b></span>";
               weekdays = calendarSpan theme.cyan;
               today = "<span color='${theme.pink}'><b><u>{}</u></b></span>";

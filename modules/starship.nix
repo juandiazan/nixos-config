@@ -20,10 +20,10 @@ in {
         color_cyan = theme.cyan;
         color_red_main = theme.red;
         color_magenta = theme.violet;
-        color_black = theme.bg;
-        color_white = theme.text;
-        color_bg1 = theme.bg1;
-        color_bg3 = theme.bg3;
+        color_black = theme.ink0;
+        color_white = theme.white;
+        color_bg1 = theme.ink2;
+        color_bg3 = theme.ink4;
       };
 
       os = {

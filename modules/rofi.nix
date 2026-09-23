@@ -24,12 +24,12 @@ in {
     theme = {
       "*" = {
         font = "GoMono Nerd Font 10";
-        background = color theme.bg "A6";
-        background-alt = color theme.black "CC";
-        foreground = color theme.text "FF";
+        background = color theme.ink0 "A6";
+        background-alt = color theme.ink1 "CC";
+        foreground = color theme.white "FF";
         selected = color theme.cyan "FF";
         active = color theme.teal "FF";
-        urgent = color theme.mutedRed "FF";
+        urgent = color theme.darkRed "FF";
         red = color theme.red "FF";
       };
 

@@ -37,7 +37,7 @@
   nixLua = lib.generators.toLua {} {
     scripts = "${config.home.homeDirectory}/nixos-config/scripts";
     theme = lib.mapAttrs (_: theme.hex) {
-      inherit (theme) bg black text teal cyan red blue pink violet mutedRed;
+      inherit (theme) ink0 ink1 white teal cyan red blue pink violet darkRed;
     };
     monitors = cfg.monitors;
   };

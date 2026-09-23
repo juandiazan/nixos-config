@@ -18,7 +18,7 @@ in {
         style = {
           wallpapers = [./assets/bgs/glass-beach-2.jpg];
           wallpaperStyle = "stretched";
-          backdrop = theme.hex theme.bg;
+          backdrop = theme.hex theme.ink0;
 
           interface = {
             brandingColor = theme.hex theme.teal;

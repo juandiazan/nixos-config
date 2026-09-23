@@ -56,11 +56,11 @@ in {
       # THEMING
       # -------
 
-      thm_bg="${theme.bg}"
-      thm_fg="${theme.text}"
+      thm_bg="${theme.ink0}"
+      thm_fg="${theme.white}"
       thm_cyan="${theme.cyan}"
-      thm_black="${theme.black}"
-      thm_gray="${theme.gray}"
+      thm_black="${theme.ink1}"
+      thm_gray="${theme.ink2}"
       thm_teal="${theme.teal}"
       thm_pink="${theme.pink}"
       thm_red="${theme.red}"
