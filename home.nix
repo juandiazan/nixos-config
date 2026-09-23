@@ -27,6 +27,7 @@ in {
     ./modules/packages/desktop.nix
     ./modules/packages/fonts.nix
     ./modules/cds/cds.nix
+    ./modules/fastfetch/fastfetch.nix
 
     ./modules/git.nix
     ./modules/gtk.nix
