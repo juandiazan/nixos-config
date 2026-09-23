@@ -1,5 +1,4 @@
-{ config, pkgs, ... }:
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -17,6 +16,11 @@
 
     neovim
   ];
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
+  };
 
   # xdg.configFile."nvim" = {
   #   source = ./dotfiles/nvim;
