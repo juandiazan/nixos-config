@@ -2,21 +2,21 @@
 
 repo="$HOME/nixos-config"
 
-option=$(printf "nixos-config\nhyprland\nwaybar\nrofi\nkitty\nzsh\nstarship\nswaync\nfastfetch" |
+option=$(printf " nixos-config\n hyprland\nwaybar\nrofi\n󰄛 kitty\n zsh\n starship\n swaync\n󰇚 fastfetch" |
   rofi -dmenu -p "Edit Config")
 
 [ -z "$option" ] && exit 0
 
 case "$option" in
-"nixos-config") target="$repo" ;;
-"hyprland") target="$repo/modules/hyprland" ;;
+" nixos-config") target="$repo" ;;
+" hyprland") target="$repo/modules/hyprland" ;;
 "waybar") target="$repo/modules/waybar" ;;
 "rofi") target="$repo/modules/rofi.nix" ;;
-"kitty") target="$repo/modules/kitty.nix" ;;
-"zsh") target="$repo/modules/shell" ;;
-"starship") target="$repo/modules/starship.nix" ;;
-"swaync") target="$HOME/.config/swaync" ;;
-"fastfetch") target="$HOME/.config/fastfetch/config.jsonc" ;;
+"󰄛 kitty") target="$repo/modules/kitty.nix" ;;
+" zsh") target="$repo/modules/shell" ;;
+" starship") target="$repo/modules/starship.nix" ;;
+" swaync") target="$HOME/.config/swaync" ;;
+"󰇚 fastfetch") target="$HOME/.config/fastfetch/config.jsonc" ;;
 *) exit 0 ;;
 esac
 

@@ -23,7 +23,7 @@ in {
 
     theme = {
       "*" = {
-        font = "GoMono Nerd Font 10";
+        font = "GoMono Nerd Font 12";
         background = color theme.ink0 "A6";
         background-alt = color theme.ink1 "CC";
         foreground = color theme.white "FF";
