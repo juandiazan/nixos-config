@@ -1,5 +1,6 @@
 {
   home.shellAliases = {
+    cls = "clear";
     lzg = "lazygit";
     lzd = "lazydocker";
     rebuild = "sudo nixos-rebuild switch -L --flake ~/nixos-config";

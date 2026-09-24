@@ -27,6 +27,12 @@
   # If it only sounds bad in Discord, that's Chromium's AGC pushing the
   # gain back to 100% -- turn off Automatic Input Sensitivity instead.
 
+  home-manager.users.juani.quickshell = {
+    enable = true;
+    monitor = "eDP-1";
+    volume.edge = "right";
+  };
+
   home-manager.users.juani.hyprland.monitors = [
     {
       output = "eDP-1";

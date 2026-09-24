@@ -28,6 +28,7 @@ in {
     ./modules/packages/fonts.nix
     ./modules/cds/cds.nix
     ./modules/fastfetch/fastfetch.nix
+    ./modules/quickshell/quickshell.nix
 
     ./modules/git.nix
     ./modules/gtk.nix

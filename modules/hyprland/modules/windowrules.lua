@@ -55,6 +55,10 @@ hl.layer_rule({ match = { namespace = "waybar" }, ignore_alpha = 0.5 })
 hl.layer_rule({ match = { namespace = "rofi" }, blur = true })
 hl.layer_rule({ match = { namespace = "rofi" }, ignore_alpha = 0.5 })
 
+-- QUICKSHELL BLUR
+hl.layer_rule({ match = { namespace = "^quickshell-" }, blur = true })
+hl.layer_rule({ match = { namespace = "^quickshell-" }, ignore_alpha = 0.5 })
+
 -- AGS BLUR
 hl.layer_rule({ match = { namespace = "ags-control-panel" }, blur = true })
 hl.layer_rule({ match = { namespace = "ags-control-panel" }, ignore_alpha = 0.5 })
