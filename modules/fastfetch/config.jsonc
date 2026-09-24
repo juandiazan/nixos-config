@@ -150,11 +150,15 @@
       "keyIcon": "󰿄"
     },
     {
+      "type": "bootmgr",
+      "keyColor": "#083f84",
+      "keyIcon": ""
+    },
+    {
       "type": "uptime",
       "keyColor": "#083f84",
       "keyIcon": ""
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;112;75;182m================= Hardware =================\u001b[0m" },
     {
       "type": "host",
@@ -208,7 +212,6 @@
         "type": 0
       }
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;5;143;143m================== Specs ===================\u001b[0m" },
     {
       "type": "cpu",
@@ -268,7 +271,6 @@
         "type": 0
       }
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;85;212;178m================= Desktop ==================\u001b[0m" },
     {
       "type": "display",
@@ -285,6 +287,11 @@
       "detectPlugin": true
     },
     {
+      "type": "lm",
+      "keyColor": "#55d4b2",
+      "keyIcon": ""
+    },
+    {
       "type": "font",
       "keyColor": "#55d4b2",
       "keyIcon": ""
@@ -299,7 +306,6 @@
       "keyColor": "#55d4b2",
       "keyIcon": "󰆿"
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;225;71;109m================= Terminal =================\u001b[0m" },
     {
       "type": "shell",
@@ -321,7 +327,6 @@
       "keyColor": "#e1476d",
       "keyIcon": "󱞎"
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;197;5;42m================== Others ==================\u001b[0m" },
     {
       "type": "datetime",
