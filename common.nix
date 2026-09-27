@@ -97,7 +97,7 @@ in {
   users.users.juani = {
     isNormalUser = true;
     description = "Juan";
-    extraGroups = ["networkmanager" "wheel" "vboxusers" "docker"];
+    extraGroups = ["networkmanager" "wheel" "vboxusers" "docker" "cdrom"];
     shell = pkgs.zsh;
   };
 
@@ -145,6 +145,8 @@ in {
       enable = true;
       nix-direnv.enable = true;
     };
+
+    k3b.enable = true;
   };
 
   hardware = {
