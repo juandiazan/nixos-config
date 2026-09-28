@@ -2,9 +2,9 @@
   config,
   pkgs,
   lib,
+  theme,
   ...
 }: let
-  theme = import ./modules/themes/glassbeach.nix;
   t = theme.limineTerminal;
 
   ansi = colors: lib.concatMapStringsSep ";" theme.hex colors;

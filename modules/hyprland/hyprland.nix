@@ -1,9 +1,9 @@
 {
   config,
   lib,
+  theme,
   ...
 }: let
-  theme = import ../themes/glassbeach.nix;
   cfg = config.hyprland;
 
   monitorType = lib.types.submodule {

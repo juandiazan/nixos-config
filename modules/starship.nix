@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  theme = import ./themes/glassbeach.nix;
-in {
+{theme, ...}: {
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
@@ -32,26 +26,17 @@ in {
         symbols = {
           Windows = "󰍲";
           Ubuntu = "󰕈";
-          SUSE = "";
-          Raspbian = "󰐿";
           Mint = "󰣭";
           Macos = "󰀵";
-          Manjaro = "";
           Linux = "󰌽";
           Gentoo = "󰣨";
           Fedora = "󰣛";
-          Alpine = "";
-          Amazon = "";
-          Android = "";
-          AOSC = "";
           Arch = "󰣇";
           Artix = "󰣇";
-          EndeavourOS = "";
           CentOS = "";
           Debian = "󰣚";
           Redhat = "󱄛";
           RedHatEnterprise = "󱄛";
-          Pop = "";
           CachyOS = "󰣇 ";
           NixOS = " ";
         };
@@ -80,7 +65,7 @@ in {
       };
 
       git_branch = {
-      symbol = "";
+        symbol = "";
         style = "bg:color_teal";
         format = "[[ $symbol $branch ](fg:color_black bg:color_teal)]($style)";
       };
@@ -187,4 +172,3 @@ in {
     };
   };
 }
-

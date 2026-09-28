@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  theme = import ./themes/glassbeach.nix;
-in {
+{theme, ...}: {
   programs.tmux = {
     enable = true;
 

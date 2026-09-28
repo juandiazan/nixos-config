@@ -2,9 +2,9 @@
   config,
   lib,
   pkgs,
+  theme,
   ...
 }: let
-  theme = import ../themes/glassbeach.nix;
   cfg = config.quickshell;
 
   # every flat "#rrggbb" attr of the theme, so new colours show up in QML

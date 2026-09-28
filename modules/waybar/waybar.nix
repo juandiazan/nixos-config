@@ -1,11 +1,8 @@
 {
-  config,
-  pkgs,
   lib,
+  theme,
   ...
 }: let
-  theme = import ../themes/glassbeach.nix;
-
   # GTK CSS colour names exposed to style.css
   cssColors = {
     bg = theme.ink0;

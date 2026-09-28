@@ -1,10 +1,9 @@
 {
   config,
-  pkgs,
+  theme,
   ...
 }: let
   inherit (config.lib.formats.rasi) mkLiteral;
-  theme = import ./themes/glassbeach.nix;
   cube = ../assets/extra/cube.png;
 
   color = c: alpha: mkLiteral (theme.withAlpha c alpha);

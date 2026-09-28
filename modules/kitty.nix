@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  theme = import ./themes/glassbeach.nix;
+{theme, ...}: let
   t = theme.terminal;
 in {
   programs.kitty = {

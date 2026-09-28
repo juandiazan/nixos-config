@@ -23,9 +23,11 @@
     obsidian-extensions,
     ...
   }: let
+    theme = import ./themes/glassbeach.nix;
     mkHost = host:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = {inherit theme;};
         modules = [
           {nixpkgs.overlays = [nur.overlays.default obsidian-extensions.overlays.default];}
           ./common.nix
@@ -36,6 +38,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "bak";
+              extraSpecialArgs = {inherit theme;};
               users.juani = import ./home.nix;
             };
           }

@@ -1,9 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  theme = import ../../themes/glassbeach.nix;
+{theme, ...}: let
   glassBeach2 = ../../../assets/bgs/glass-beach-2.jpg;
 in {
   programs.hyprlock = {
