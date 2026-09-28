@@ -29,6 +29,7 @@ in {
     ./modules/cds/cds.nix
     ./modules/fastfetch/fastfetch.nix
     ./modules/quickshell/quickshell.nix
+    ./modules/obsidian/obsidian.nix
 
     ./modules/git.nix
     ./modules/gtk.nix

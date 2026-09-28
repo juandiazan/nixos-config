@@ -9,19 +9,25 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    obsidian-extensions = {
+      url = "github:karaolidis/nix-obsidian-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
     nixpkgs,
     home-manager,
     nur,
+    obsidian-extensions,
     ...
   }: let
     mkHost = host:
       nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          {nixpkgs.overlays = [nur.overlays.default];}
+          {nixpkgs.overlays = [nur.overlays.default obsidian-extensions.overlays.default];}
           ./common.nix
           ./hosts/${host}/configuration.nix
           home-manager.nixosModules.home-manager

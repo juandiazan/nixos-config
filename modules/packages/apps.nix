@@ -7,7 +7,6 @@
     # desktop apps
     discord
     librewolf
-    obsidian
     spotify
     localsend
     nautilus
