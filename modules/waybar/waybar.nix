@@ -62,7 +62,6 @@ in {
           "disk"
           "idle_inhibitor"
           "hyprland/language"
-          "custom/settings"
           "battery"
         ];
 
@@ -135,7 +134,6 @@ in {
             playing = "󰝚";
           };
           interval = "1";
-          on-click-right = "ags toggle media-player";
           on-scroll-up = "playerctl --ignore-player=firefox,librewolf next";
           on-scroll-down = "playerctl --ignore-player=firefox,librewolf previous";
           ignored-players = [
@@ -261,16 +259,9 @@ in {
         };
 
         "hyprland/language" = {
-          on-click = "hyprctl switchxkblayout ckb1:-corsair-gaming-k95-rgb-platinum-keyboard-vkb next";
+          on-click = "hyprctl switchxkblayout at-translated-set-2-keyboard next";
           format-es = "  ESP";
           format-en = "  ENG";
-        };
-
-        "custom/settings" = {
-          on-click = "ags toggle control-panel";
-          format = " ";
-          escape = true;
-          tooltip = false;
         };
 
         battery = {
