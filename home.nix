@@ -40,6 +40,7 @@ in {
     ./modules/neovim.nix
     ./modules/rofi.nix
     ./modules/mimeapps.nix
+    ./modules/cli.nix
 
     ./modules/hyprland/hyprland.nix
     ./modules/hyprland/hypr-stack/hyprpaper.nix

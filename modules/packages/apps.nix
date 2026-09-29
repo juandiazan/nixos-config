@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   home.packages = with pkgs; [
     # desktop apps
     discord
@@ -17,19 +13,6 @@
     zoom-us
     libreoffice-stable
     obs-studio
-
-    # TUIs
-    btop
-    bluetui
-    wiremix
-    kew
-    imv
-    yazi
-
-    # CLI tools
-    fastfetch
-    eza
-    bat
 
     # hyprland
     hyprpicker
