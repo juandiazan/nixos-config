@@ -1,11 +1,4 @@
-{
-  config,
-  lib,
-  theme,
-  ...
-}: let
-  cfg = config.hyprland;
-
+{lib, ...}: let
   monitorType = lib.types.submodule {
     options = {
       output = lib.mkOption {
@@ -33,24 +26,40 @@
       };
     };
   };
-
-  nixLua = lib.generators.toLua {} {
-    scripts = "${config.home.homeDirectory}/nixos-config/scripts";
-    theme = lib.mapAttrs (_: theme.hex) {
-      inherit (theme) ink0 ink1 white teal cyan red blue pink violet darkRed;
-    };
-    monitors = cfg.monitors;
-  };
 in {
+  # Each file sets part of wayland.windowManager.hyprland.settings; the module
+  # system merges them into a single ~/.config/hypr/hyprland.lua.
+  # Every attribute becomes an hl.<name>(...) call, see settings/*.nix.
+  imports = [
+    ./settings/env.nix
+    ./settings/monitors.nix
+    ./settings/autostart.nix
+    ./settings/input.nix
+    ./settings/layout.nix
+    ./settings/decorations.nix
+    ./settings/animations.nix
+    ./settings/windowrules.nix
+    ./settings/misc.nix
+  ];
+
   options.hyprland.monitors = lib.mkOption {
     type = lib.types.listOf monitorType;
     default = [];
-    description = "Per-host monitor layout, consumed by modules/monitors.lua.";
+    description = "Per-host monitor layout, consumed by settings/monitors.nix.";
   };
 
-  config.xdg.configFile = {
-    "hypr/hyprland.lua".source = ./hyprland.lua;
-    "hypr/modules".source = ./modules;
-    "hypr/nix.lua".text = "return " + nixLua;
+  config.wayland.windowManager.hyprland = {
+    enable = true;
+    configType = "lua";
+
+    # Hyprland and its portal are installed by programs.hyprland in system.nix
+    package = null;
+    portalPackage = null;
+
+    # the session is managed by UWSM (programs.hyprland.withUWSM)
+    systemd.enable = false;
+
+    # kept as plain Lua, written to ~/.config/hypr/binds.lua and required
+    extraLuaFiles.binds = ./binds.lua;
   };
 }

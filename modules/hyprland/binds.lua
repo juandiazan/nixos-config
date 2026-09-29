@@ -7,7 +7,7 @@ local terminal = "kitty"
 local fileManager = "nautilus"
 local browser = "firefox"
 
-local scriptsPath = require("nix").scripts .. "/"
+local scriptsPath = os.getenv("HOME") .. "/nixos-config/scripts/"
 
 --- MENUS
 local appMenu = "pkill rofi || bash " .. scriptsPath .. "rofi/launcher.sh"

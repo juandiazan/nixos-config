@@ -9,6 +9,10 @@
 
   ansi = colors: lib.concatMapStringsSep ";" theme.hex colors;
 in {
+  imports = [
+    ./modules/hyprland/system.nix
+  ];
+
   boot = {
     loader = {
       limine = {
@@ -132,11 +136,6 @@ in {
   };
 
   programs = {
-    hyprland = {
-      enable = true;
-      withUWSM = true;
-    };
-
     zsh.enable = true;
 
     steam.enable = true;

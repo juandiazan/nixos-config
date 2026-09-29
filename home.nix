@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   cursorThemes = {
     bibata = {
       name = "Bibata-Modern-Classic";
