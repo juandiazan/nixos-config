@@ -104,7 +104,7 @@
     "noBuffer": false,
     "key": {
       "width": 0,
-      "type": "string",
+      "type": "both",
       "paddingLeft": 0
     },
     "freq": {
@@ -137,12 +137,12 @@
     {
       "type": "os",
       "keyColor": "#083f84",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "kernel",
       "keyColor": "#083f84",
-      "keyIcon": ""
+      "keyIcon": "󰛸"
     },
     {
       "type": "initsystem",
@@ -150,14 +150,9 @@
       "keyIcon": "󰿄"
     },
     {
-      "type": "bootmgr",
-      "keyColor": "#083f84",
-      "keyIcon": ""
-    },
-    {
       "type": "uptime",
       "keyColor": "#083f84",
-      "keyIcon": ""
+      "keyIcon": "󱎫"
     },
     { "type": "custom", "format": "\u001b[38;2;112;75;182m================= Hardware =================\u001b[0m" },
     {
@@ -173,12 +168,12 @@
     {
       "type": "keyboard",
       "keyColor": "#704bb6",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "battery",
       "keyColor": "#704bb6",
-      "keyIcon": "",
+      "keyIcon": "",
       "temp": false,
       "percent": {
         "green": 50,
@@ -194,7 +189,7 @@
     {
       "type": "wifi",
       "keyColor": "#704bb6",
-      "keyIcon": "",
+      "keyIcon": "",
       "percent": {
         "green": 75,
         "yellow": 50,
@@ -204,7 +199,7 @@
     {
       "type": "bluetooth",
       "keyColor": "#704bb6",
-      "keyIcon": "",
+      "keyIcon": "󰂯",
       "showDisconnected": false,
       "percent": {
         "green": 50,
@@ -216,7 +211,7 @@
     {
       "type": "cpu",
       "keyColor": "#058f8f",
-      "keyIcon": "",
+      "keyIcon": "",
       "temp": false,
       "showPeCoreCount": true,
       "tempSensor": ""
@@ -236,15 +231,9 @@
       }
     },
     {
-      "type": "physicalmemory",
-      "keyColor": "#058f8f",
-      "keyIcon": "󰑭",
-      "showEmptySlots": false
-    },
-    {
       "type": "memory",
       "keyColor": "#058f8f",
-      "keyIcon": "",
+      "keyIcon": "󰑭",
       "percent": {
         "green": 50,
         "yellow": 80,
@@ -254,7 +243,7 @@
     {
       "type": "disk",
       "keyColor": "#058f8f",
-      "keyIcon": "",
+      "keyIcon": "",
       "showRegular": true,
       "showExternal": true,
       "showHidden": false,
@@ -283,7 +272,7 @@
     {
       "type": "wm",
       "keyColor": "#55d4b2",
-      "keyIcon": "",
+      "keyIcon": "",
       "detectPlugin": true
     },
     {
@@ -294,12 +283,12 @@
     {
       "type": "font",
       "keyColor": "#55d4b2",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "icons",
       "keyColor": "#55d4b2",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "cursor",
@@ -310,17 +299,17 @@
     {
       "type": "shell",
       "keyColor": "#e1476d",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "terminal",
       "keyColor": "#e1476d",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "terminalfont",
       "keyColor": "#e1476d",
-      "keyIcon": ""
+      "keyIcon": "󰛖"
     },
     {
       "type": "editor",
@@ -331,7 +320,7 @@
     {
       "type": "datetime",
       "keyColor": "#c5052a",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     {
       "type": "player",
@@ -341,7 +330,7 @@
     {
       "type": "media",
       "keyColor": "#c5052a",
-      "keyIcon": "",
+      "keyIcon": "󰻏",
       "percent": {
         "green": 100,
         "yellow": 100,
@@ -359,7 +348,7 @@
     {
       "type": "version",
       "keyColor": "#c5052a",
-      "keyIcon": ""
+      "keyIcon": ""
     },
     "break",
     {
