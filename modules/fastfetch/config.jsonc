@@ -1,23 +1,11 @@
 {
-  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
   "logo": {
     "type": "auto",
     "source": "~/nixos-config/assets/extra/cryagonal.png",
-    "color": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
-      "6": "",
-      "7": "",
-      "8": "",
-      "9": ""
-    },
     "width": null,
     "height": null,
     "padding": {
-      "top": 0,
+      "top": 8,
       "left": 0,
       "bottom": 0,
       "right": 4
@@ -37,13 +25,7 @@
     "showErrors": false,
     "disableLinewrap": false,
     "hideCursor": false,
-    "separator": ": ",
-    "color": {
-      "keys": "",
-      "title": "",
-      "output": "",
-      "separator": ""
-    },
+    "separator": "   ",
     "brightColor": true,
     "duration": {
       "abbreviation": false,
@@ -121,18 +103,20 @@
     "dsForceDrm": false
   },
   "modules": [
+    "break",
+    "break",
     {
       "type": "title",
-      "key": " ",
-      "keyIcon": "",
+      "key": "user@host",
+      "keyColor": "#FCF1DF",
+      "keyIcon": "",
       "fqdn": false,
       "color": {
-        "user": "",
-        "at": "",
-        "host": ""
+        "user": "#FCF1DF",
+        "at": "#FCF1DF",
+        "host": "#FCF1DF",
       }
     },
-    "break",
     { "type": "custom", "format": "\u001b[38;2;8;63;132m==================== OS ====================\u001b[0m" },
     {
       "type": "os",
