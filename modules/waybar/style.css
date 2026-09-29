@@ -8,7 +8,7 @@
 }
 
 window#waybar {
-    background-color: alpha(@bg, 0.65);
+    background-color: alpha(#0b011c, 0.65);
 }
 
 tooltip {
