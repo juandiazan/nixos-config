@@ -173,6 +173,7 @@
     {
       "type": "wifi",
       "keyColor": "#704bb6",
+      "format": "{ssid} - {band} GHz - {protocol~-8,-1} - {security}",
       "keyIcon": "",
       "percent": {
         "green": 75,
@@ -205,7 +206,8 @@
       "keyColor": "#058f8f",
       "keyIcon": "󰾲",
       "driverSpecific": false,
-      "detectionMethod": "pci",
+      "detectionMethod": "vulkan",
+      "format": "{name}",
       "temp": false,
       "hideType": "none",
       "percent": {
@@ -249,6 +251,7 @@
       "type": "display",
       "keyColor": "#55d4b2",
       "keyIcon": "󰍹",
+      "format": "{width}x{height} @ {scale-factor}x, {refresh-rate} Hz",
       "compactType": "none",
       "preciseRefreshRate": false,
       "order": null
@@ -326,13 +329,8 @@
       "keyColor": "#c5052a",
       "keyIcon": "󰖙",
       "location": "",
-      "outputFormat": "%t+-+%C+(%l)",
+      "outputFormat": "%t+-+%C",
       "timeout": 0
-    },
-    {
-      "type": "version",
-      "keyColor": "#c5052a",
-      "keyIcon": ""
     },
     "break",
     {
