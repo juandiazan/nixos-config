@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  theme,
   ...
 }: let
   iconThemes = {
@@ -34,6 +35,24 @@ in {
     };
 
     gtk3.extraConfig.gtk-application-prefer-dark-theme = 1;
+
+    # libadwaita ignores gtk-theme-name, so recolor it with the palette instead
+    gtk4.extraCss = ''
+      @define-color window_bg_color ${theme.ink0};
+      @define-color window_fg_color ${theme.white};
+      @define-color view_bg_color ${theme.ink1};
+      @define-color view_fg_color ${theme.white};
+      @define-color headerbar_bg_color ${theme.ink1};
+      @define-color headerbar_fg_color ${theme.white};
+      @define-color sidebar_bg_color ${theme.ink1};
+      @define-color sidebar_fg_color ${theme.whiteDim};
+      @define-color card_bg_color ${theme.ink2};
+      @define-color popover_bg_color ${theme.ink2};
+      @define-color dialog_bg_color ${theme.ink2};
+      @define-color accent_bg_color ${theme.teal};
+      @define-color accent_fg_color ${theme.ink0};
+      @define-color accent_color ${theme.lightTeal};
+    '';
   };
 
   dconf.settings."org/gnome/desktop/interface" = {
