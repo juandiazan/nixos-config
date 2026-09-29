@@ -11,7 +11,7 @@ in {
   programs.rofi = {
     enable = true;
 
-    extraConfig = {
+    settings = {
       modi = "drun,window";
       show-icons = true;
       display-drun = "Apps";
