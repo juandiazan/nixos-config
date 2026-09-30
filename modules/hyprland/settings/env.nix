@@ -5,7 +5,6 @@
     HYPRCURSOR_SIZE = 24;
 
     # toolkit backend
-    NIXOS_OZONE_WL = 1;
     GDK_BACKEND = "wayland,x11,*";
     QT_QPA_PLATFORM = "wayland;xcb";
     SDL_VIDEODRIVER = "wayland";
