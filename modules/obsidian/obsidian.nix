@@ -17,7 +17,7 @@
       appearance = {
         nativeMenus = false;
         theme = "obsidian";
-        cssTheme = "Obsidian Nord";
+        cssTheme = "Willemstad";
       };
 
       corePlugins = [
