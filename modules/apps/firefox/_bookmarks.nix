@@ -8,6 +8,10 @@
         url = "https://search.nixos.org/packages";
       }
       {
+        name = "NixOS home-manager Options Search";
+        url = "https://home-manager-options.extranix.com/";
+      }
+      {
         name = "GitHub";
         url = "https://github.com/";
       }
