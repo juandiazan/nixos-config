@@ -90,12 +90,16 @@ in {
     gnome = {
       tinysparql.enable = true;
       localsearch.enable = true;
+      gnome-keyring.enable = true;
     };
   };
 
   console.keyMap = "la-latin1";
 
-  security.rtkit.enable = true;
+  security = {
+    rtkit.enable = true;
+    pam.services.sddm.enableGnomeKeyring = true;
+  };
 
   users.users.juani = {
     isNormalUser = true;

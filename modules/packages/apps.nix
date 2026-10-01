@@ -6,6 +6,7 @@
     spotify
     localsend
     nautilus
+    ente-auth
     loupe # image viewer
     gnome-text-editor
     vlc
