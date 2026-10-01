@@ -5,12 +5,18 @@
       eza
       bat
 
-      btop
       bluetui
       wiremix
       kew
       imv
       yazi
     ];
+
+    programs.btop = {
+      enable = true;
+      settings = {
+        color_theme = "adapta";
+      };
+    };
   };
 }
