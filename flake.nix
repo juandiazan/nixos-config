@@ -1,6 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+
+    import-tree.url = "github:vic/import-tree";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -16,36 +24,5 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    nur,
-    obsidian-extensions,
-    ...
-  }: let
-    theme = import ./themes/glassbeach.nix;
-    mkHost = host:
-      nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {inherit theme;};
-        modules = [
-          {nixpkgs.overlays = [nur.overlays.default obsidian-extensions.overlays.default];}
-          ./common.nix
-          ./hosts/${host}/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              backupFileExtension = "bak";
-              extraSpecialArgs = {inherit theme;};
-              users.juani = import ./home.nix;
-            };
-          }
-        ];
-      };
-  in {
-    nixosConfigurations.nixos-laptop = mkHost "laptop";
-    nixosConfigurations.nixos-desktop = mkHost "desktop";
-  };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake {inherit inputs;} (inputs.import-tree ./modules);
 }
