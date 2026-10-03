@@ -90,9 +90,7 @@
       layer_rule =
         blurLayer "waybar"
         ++ blurLayer "rofi"
-        ++ blurLayer "^quickshell-"
-        ++ blurLayer "ags-control-panel"
-        ++ blurLayer "ags-media-player";
+        ++ blurLayer "^quickshell-";
     };
   };
 }

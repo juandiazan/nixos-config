@@ -11,10 +11,9 @@ in {
 
         col = {
           active_border = {
-            colors = ["rgb(${themeNoHash.cyan})" "rgb(${themeNoHash.red})"];
-            angle = 60;
+            colors = ["rgb(${themeNoHash.teal})"];
           };
-          inactive_border = "rgba(595959aa)";
+          inactive_border = "rgb(${themeNoHash.red})";
         };
 
         # Set to true to enable resizing windows by clicking and dragging on borders and gaps
