@@ -1,5 +1,5 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) theme;
 in {
   flake.modules.homeManager.base = {
     config,
@@ -9,20 +9,17 @@ in {
   }: let
     cfg = config.quickshell;
 
-    # every flat "#rrggbb" attr of the theme, so new colours show up in QML
-    # without touching this file
-    colors = lib.filterAttrs (_: value: builtins.isString value && lib.hasPrefix "#" value) theme;
-
+    # every colour of the theme, so new colours show up in QML without touching this file
     colorProperties =
       lib.concatStringsSep "\n"
-      (lib.mapAttrsToList (name: value: "    readonly property color ${name}: \"${value}\";") colors);
+      (lib.mapAttrsToList (name: value: "    readonly property color ${name}: \"${value}\";") theme);
 
     themeQml = pkgs.writeText "Theme.qml" ''
       pragma Singleton
       import QtQuick
       import Quickshell
 
-      // Generated from modules/themes/glassbeach.nix -- edit that, not this.
+      // Generated from theme.nix -- edit that, not this.
       Singleton {
       ${colorProperties}
 

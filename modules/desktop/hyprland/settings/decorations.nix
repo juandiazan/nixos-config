@@ -1,5 +1,5 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) themeNoHash;
 in {
   flake.modules.homeManager.base = {
     wayland.windowManager.hyprland.settings.config = {
@@ -11,7 +11,7 @@ in {
 
         col = {
           active_border = {
-            colors = [(theme.rgb theme.cyan) (theme.rgb theme.red)];
+            colors = ["rgb(${themeNoHash.cyan})" "rgb(${themeNoHash.red})"];
             angle = 60;
           };
           inactive_border = "rgba(595959aa)";

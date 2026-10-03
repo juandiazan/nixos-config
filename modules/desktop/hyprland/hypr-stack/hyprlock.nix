@@ -1,5 +1,5 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) themeNoHash;
 in {
   flake.modules.homeManager.base = let
     glassBeach2 = ../../../../assets/bgs/glass-beach-2.jpg;
@@ -29,9 +29,9 @@ in {
             dots_size = 0.33;
             dots_spacing = 0.15;
 
-            outer_color = theme.rgb theme.cyan;
+            outer_color = "rgb(${themeNoHash.cyan})";
             inner_color = "rgb(0, 0, 0)";
-            font_color = theme.rgb theme.red;
+            font_color = "rgb(${themeNoHash.red})";
 
             fade_on_empty = false;
             font_family = "GoMono Nerd Font";
@@ -48,7 +48,7 @@ in {
           {
             monitor = "";
             text = ''cmd[update:1000] echo "$(date +"%A, %B %d")"'';
-            color = theme.rgb theme.teal;
+            color = "rgb(${themeNoHash.teal})";
             font_size = 40;
             font_family = "GoMono Nerd Font";
             position = "0, 300";
@@ -59,7 +59,7 @@ in {
           {
             monitor = "";
             text = ''cmd[update:1000] date +"%-I:%M%p"'';
-            color = theme.rgb theme.teal;
+            color = "rgb(${themeNoHash.teal})";
             font_size = 95;
             font_family = "GoMono Nerd Font Extrabold";
             position = "0, 180";
@@ -70,7 +70,7 @@ in {
           {
             monitor = "";
             text = ''cmd[update:1000] echo "Welcome, $(whoami)"'';
-            color = theme.rgb theme.pink;
+            color = "rgb(${themeNoHash.pink})";
             font_size = 16;
             font_family = "GoMono Nerd Font Bold";
             position = "0, 50";
@@ -81,7 +81,7 @@ in {
           {
             monitor = "";
             text = ''cmd[update:1000] echo "  $(playerctl metadata artist) - $(playerctl metadata title)"'';
-            color = theme.rgb theme.pink;
+            color = "rgb(${themeNoHash.pink})";
             font_size = 16;
             font_family = "GoMono Nerd Font Bold";
             position = "0, 50";

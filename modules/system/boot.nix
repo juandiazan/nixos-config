@@ -1,12 +1,11 @@
 {
-  config,
+  self,
   lib,
   ...
 }: let
-  inherit (config) theme;
-  t = theme.limineTerminal;
+  inherit (self) themeNoHash;
 
-  ansi = colors: lib.concatMapStringsSep ";" theme.hex colors;
+  ansi = colors: lib.concatStringsSep ";" colors;
 in {
   flake.modules.nixos.base = {
     boot = {
@@ -18,18 +17,37 @@ in {
           style = {
             wallpapers = [../../assets/bgs/glass-beach-2.jpg];
             wallpaperStyle = "stretched";
-            backdrop = theme.hex theme.ink0;
+            backdrop = themeNoHash.ink0;
 
             interface = {
-              brandingColor = theme.hex theme.teal;
-              helpColor = theme.hex theme.cyan;
-              helpColorBright = theme.hex theme.teal;
+              brandingColor = themeNoHash.teal;
+              helpColor = themeNoHash.cyan;
+              helpColorBright = themeNoHash.teal;
             };
 
             graphicalTerminal = {
-              foreground = theme.hex t.foreground;
-              palette = ansi [t.black t.red t.green t.yellow t.blue t.magenta t.cyan t.white];
-              brightPalette = ansi [t.brightBlack t.brightRed t.brightGreen t.brightYellow t.brightBlue t.brightMagenta t.brightCyan t.brightWhite];
+              foreground = themeNoHash.white;
+              # same colours as kitty, except the cyan slots are red
+              palette = ansi [
+                themeNoHash.ink1 # black
+                themeNoHash.red # red
+                themeNoHash.green # green
+                themeNoHash.sand # yellow
+                themeNoHash.blue # blue
+                themeNoHash.magenta # magenta
+                themeNoHash.red # cyan
+                themeNoHash.white # white
+              ];
+              brightPalette = ansi [
+                themeNoHash.ink5 # black
+                themeNoHash.lightRed # red
+                themeNoHash.lightGreen # green
+                themeNoHash.lightSand # yellow
+                themeNoHash.lightBlue # blue
+                themeNoHash.lightMagenta # magenta
+                themeNoHash.red # cyan
+                themeNoHash.whiteDim # white
+              ];
             };
           };
         };

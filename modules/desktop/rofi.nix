@@ -1,12 +1,12 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) theme;
 in {
   # this config is home-manager's (for the rasi helpers), not the flake's
   flake.modules.homeManager.base = {config, ...}: let
     inherit (config.lib.formats.rasi) mkLiteral;
     cube = ../../assets/extra/cube.png;
 
-    color = c: alpha: mkLiteral (theme.withAlpha c alpha);
+    color = c: alpha: mkLiteral "${c}${alpha}"; # hex colour + alpha (transparency), e.g. "#0F1015A6"
   in {
     programs.rofi = {
       enable = true;

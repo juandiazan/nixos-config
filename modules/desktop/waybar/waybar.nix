@@ -1,10 +1,10 @@
 {
-  config,
+  self,
   lib,
   inputs,
   ...
 }: let
-  inherit (config) theme;
+  inherit (self) theme;
 
   # GTK CSS colour names exposed to style.css
   cssColors = {
@@ -12,18 +12,18 @@
     black = theme.ink1;
     text = theme.white;
 
-    teal = theme.teal;
-    cyan = theme.cyan;
-    red = theme.red;
-    blue = theme.blue;
-    pink = theme.pink;
-    violet = theme.violet;
+    inherit (theme) teal; # teal = theme.teal;
+    inherit (theme) cyan;
+    inherit (theme) red;
+    inherit (theme) blue;
+    inherit (theme) pink;
+    inherit (theme) violet;
 
-    teal-light = theme.lightTeal;
-    red-light = theme.lightRed;
-    blue-light = theme.lightBlue;
-    cyan-light = theme.lightCyan;
-    violet-light = theme.lightViolet;
+    inherit (theme) lightTeal;
+    inherit (theme) lightRed;
+    inherit (theme) lightBlue;
+    inherit (theme) lightCyan;
+    inherit (theme) lightViolet;
   };
 
   defineColors = lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "@define-color ${name} ${value};") cssColors);

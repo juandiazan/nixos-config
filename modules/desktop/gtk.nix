@@ -1,5 +1,5 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) theme;
 in {
   # dconf.settings (here and in nautilus.nix) only applies with this on
   flake.modules.nixos.base.programs.dconf.enable = true;

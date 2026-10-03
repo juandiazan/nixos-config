@@ -1,5 +1,5 @@
-{config, ...}: let
-  t = config.theme.terminal;
+{self, ...}: let
+  inherit (self) theme;
 in {
   flake.modules.homeManager.base.programs.kitty = {
     enable = true;
@@ -30,46 +30,47 @@ in {
       cursor_trail_start_threshold = 2;
 
       # theme
-      foreground = t.foreground;
-      background = t.background;
-      selection_foreground = t.selectionForeground;
-      selection_background = t.selectionBackground;
+      foreground = theme.white;
+      background = theme.ink0;
+      selection_foreground = theme.white;
+      selection_background = theme.teal;
 
-      cursor = t.cursor;
-      cursor_text_color = t.brightWhite;
+      cursor = theme.red;
+      cursor_text_color = theme.whiteDim;
 
-      url_color = t.url;
+      url_color = theme.cyan;
 
-      active_border_color = t.green;
-      inactive_border_color = t.surface;
-      bell_border_color = t.brightRed;
+      active_border_color = theme.green;
+      inactive_border_color = theme.ink1;
+      bell_border_color = theme.lightRed;
       visual_bell_color = "none";
 
-      wayland_titlebar_color = t.titlebar;
-      macos_titlebar_color = t.titlebar;
+      wayland_titlebar_color = theme.ink1;
+      macos_titlebar_color = theme.ink1;
 
-      active_tab_foreground = t.foreground;
-      active_tab_background = t.surface;
-      inactive_tab_foreground = t.brightBlack;
-      inactive_tab_background = t.surface;
-      tab_bar_background = t.surface;
+      active_tab_foreground = theme.white;
+      active_tab_background = theme.ink1;
+      inactive_tab_foreground = theme.ink5;
+      inactive_tab_background = theme.ink1;
+      tab_bar_background = theme.ink1;
 
-      color0 = t.black;
-      color8 = t.brightBlack;
-      color1 = t.red;
-      color9 = t.brightRed;
-      color2 = t.green;
-      color10 = t.brightGreen;
-      color3 = t.yellow;
-      color11 = t.brightYellow;
-      color4 = t.blue;
-      color12 = t.brightBlue;
-      color5 = t.magenta;
-      color13 = t.brightMagenta;
-      color6 = t.cyan;
-      color14 = t.brightCyan;
-      color7 = t.white;
-      color15 = t.brightWhite;
+      # terminal colours: normal (0-7) and bright (8-15)
+      color0 = theme.ink1; # black
+      color8 = theme.ink5;
+      color1 = theme.red; # red
+      color9 = theme.lightRed;
+      color2 = theme.green; # green
+      color10 = theme.lightGreen;
+      color3 = theme.sand; # yellow
+      color11 = theme.lightSand;
+      color4 = theme.blue; # blue
+      color12 = theme.lightBlue;
+      color5 = theme.magenta; # magenta
+      color13 = theme.lightMagenta;
+      color6 = theme.cyan; # cyan
+      color14 = theme.lightCyan;
+      color7 = theme.white; # white
+      color15 = theme.whiteDim;
     };
   };
 }

@@ -1,4 +1,4 @@
-/* @define-color palette is prepended by waybar.nix from themes/glassbeach.nix */
+/* @define-color palette is prepended by waybar.nix from theme.nix */
 
 * {
     all: unset;
@@ -147,9 +147,9 @@ tooltip label {
 }
 
 #cpu:hover {
-    color: @red-light;
-    border-top: 3px solid @red-light;
-    border-bottom: 3px solid @red-light;
+    color: @lightRed;
+    border-top: 3px solid @lightRed;
+    border-bottom: 3px solid @lightRed;
     transition: all 150ms ease-in-out;
 }
 
@@ -160,9 +160,9 @@ tooltip label {
 }
 
 #memory:hover {
-    color: @cyan-light;
-    border-top: 3px solid @cyan-light;
-    border-bottom: 3px solid @cyan-light;
+    color: @lightCyan;
+    border-top: 3px solid @lightCyan;
+    border-bottom: 3px solid @lightCyan;
     transition: all 150ms ease-in-out;
 
 }
@@ -174,9 +174,9 @@ tooltip label {
 }
 
 #disk:hover {
-    color: @teal-light;
-    border-bottom: 3px solid @teal-light;
-    border-top: 3px solid @teal-light;
+    color: @lightTeal;
+    border-bottom: 3px solid @lightTeal;
+    border-top: 3px solid @lightTeal;
     transition: all 150ms ease-in-out;
 }
 
@@ -187,9 +187,9 @@ tooltip label {
 }
 
 #idle_inhibitor.deactivated:hover {
-    color: @red-light;
-    border-bottom: 3px solid @red-light;
-    border-top: 3px solid @red-light;
+    color: @lightRed;
+    border-bottom: 3px solid @lightRed;
+    border-top: 3px solid @lightRed;
     transition: all 150ms ease-in-out;
 }
 
@@ -200,9 +200,9 @@ tooltip label {
 }
 
 #idle_inhibitor.activated:hover {
-    color: @teal-light;
-    border-bottom: 3px solid @teal-light;
-    border-top: 3px solid @teal-light;
+    color: @lightTeal;
+    border-bottom: 3px solid @lightTeal;
+    border-top: 3px solid @lightTeal;
     transition: all 150ms ease-in-out;
 }
 
@@ -213,9 +213,9 @@ tooltip label {
 }
 
 #language:hover {
-    color: @violet-light;
-    border-top: 3px solid @violet-light;
-    border-bottom: 3px solid @violet-light;
+    color: @lightViolet;
+    border-top: 3px solid @lightViolet;
+    border-bottom: 3px solid @lightViolet;
     transition: all 150ms ease-in-out;
 }
 
@@ -227,9 +227,9 @@ tooltip label {
 }
 
 #custom-settings:hover {
-    color: @cyan-light;
-    border-top: 3px solid @cyan-light;
-    border-bottom: 3px solid @cyan-light;
+    color: @lightCyan;
+    border-top: 3px solid @lightCyan;
+    border-bottom: 3px solid @lightCyan;
     transition: all 150ms ease-in-out;
 }
 
@@ -240,7 +240,7 @@ tooltip label {
 }
 
 #battery:hover {
-    color: @teal-light;
-    border-top: 3px solid @teal-light;
-    border-bottom: 3px solid @teal-light;
+    color: @lightTeal;
+    border-top: 3px solid @lightTeal;
+    border-bottom: 3px solid @lightTeal;
 }

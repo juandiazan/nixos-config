@@ -1,5 +1,5 @@
-{config, ...}: let
-  inherit (config) theme;
+{self, ...}: let
+  inherit (self) theme;
 in {
   flake.modules.homeManager.base.programs.starship = {
     enable = true;
