@@ -1,5 +1,5 @@
 {
-  flake.modules.homeManager.base = {pkgs, ...}: {
+  flake.modules.homeManager.dev = {pkgs, ...}: {
     home.packages = with pkgs; [
       awscli2
       gh

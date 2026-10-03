@@ -7,15 +7,17 @@
 
   ansi = colors: lib.concatStringsSep ";" colors;
 in {
-  flake.modules.nixos.base = {
+  flake.modules.nixos.base = {pkgs, ...}: {
     boot = {
+      kernelPackages = pkgs.linuxPackages_latest;
+
       loader = {
         limine = {
           enable = true;
           maxGenerations = 10;
 
           style = {
-            wallpapers = [../../assets/bgs/glass-beach-2.jpg];
+            wallpapers = [../../../assets/bgs/glass-beach-2.jpg];
             wallpaperStyle = "stretched";
             backdrop = themeNoHash.ink0;
 

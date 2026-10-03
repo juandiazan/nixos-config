@@ -2,7 +2,7 @@
   inherit (self) themeNoHash;
 in {
   flake.modules.homeManager.base = let
-    glassBeach2 = ../../../../assets/bgs/glass-beach-2.jpg;
+    glassBeach2 = ../../../../../assets/bgs/glass-beach-2.jpg;
   in {
     programs.hyprlock = {
       enable = true;

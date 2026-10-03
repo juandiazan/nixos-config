@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.base.programs.direnv = {
+  flake.modules.nixos.dev.programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
   };

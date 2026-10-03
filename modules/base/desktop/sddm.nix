@@ -11,7 +11,7 @@
         flavor = "mocha";
         accent = "teal";
         loginBackground = true;
-        background = ../../assets/bgs/glass-beach-2.jpg;
+        background = ../../../assets/bgs/glass-beach-2.jpg;
       })
     ];
   };

@@ -3,6 +3,7 @@
     cls = "clear";
     lzg = "lazygit";
     rip = "abcde";
+    v = "nvim";
     rebuild = "sudo nixos-rebuild switch -L --flake ~/nixos-config";
     update = "sudo nix flake update --flake ~/nixos-config";
     rollback = "sudo nixos-rebuild switch --rollback";

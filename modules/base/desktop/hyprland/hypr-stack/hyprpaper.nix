@@ -5,7 +5,7 @@
     ...
   }: let
     monitors = config.hyprland.monitors;
-    metropolis = ../../../../assets/bgs/metropolis.png;
+    metropolis = ../../../../../assets/bgs/metropolis.png;
   in {
     services.hyprpaper = {
       enable = true;

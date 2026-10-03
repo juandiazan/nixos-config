@@ -8,9 +8,8 @@
       modules = with config.flake.modules.nixos; [
         base
         cds
-        docker
-        steam
-        virtualbox
+        dev
+        gaming
         laptop
       ];
     };

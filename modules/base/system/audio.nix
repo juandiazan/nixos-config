@@ -1,5 +1,7 @@
 {
   flake.modules.nixos.base = {
+    security.rtkit.enable = true;
+
     services = {
       pulseaudio.enable = false;
       pipewire = {
@@ -10,6 +12,5 @@
       };
     };
 
-    security.rtkit.enable = true;
   };
 }
