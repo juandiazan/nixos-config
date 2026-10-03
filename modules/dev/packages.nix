@@ -4,6 +4,8 @@
       awscli2
       gh
       terraform
+      python3
+      dotnet-sdk
 
       lazygit
       lazysql
