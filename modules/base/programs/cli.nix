@@ -2,7 +2,6 @@
   flake.modules.homeManager.base = {pkgs, ...}: {
     home.packages = with pkgs; [
       eza
-      bat
 
       bluetui
       wiremix
