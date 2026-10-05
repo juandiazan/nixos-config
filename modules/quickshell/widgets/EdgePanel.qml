@@ -3,15 +3,6 @@ import Quickshell
 import Quickshell.Wayland
 import qs
 
-// A layer-shell panel pinned to a vertical screen edge that stays out of the
-// way until hovered.
-//
-// Only a thin strip accepts pointer input while collapsed -- the input mask
-// follows the hover area, so everything past `collapsedWidth` still reaches the
-// windows underneath. The strip covers a band of `bandHeight` centred on the
-// screen rather than the whole edge, so it doesn't eat window resize handles.
-//
-// Children are laid out inside that band and slide in when it opens.
 PanelWindow {
     id: root
 
@@ -25,12 +16,11 @@ PanelWindow {
     property bool onRight: false
     property bool expanded: false
 
-    // press and drag positions are reported relative to this item
-    property Item track: null
+    property list<Item> tracks
 
-    signal scrolled(int steps)
-    signal slid(real fraction)  // 0 at the bottom of `track`, 1 at the top
-    signal altClicked
+    signal scrolled(int index, int steps)
+    signal slid(int index, real fraction)  // 0 at the bottom of the track, 1 at the top
+    signal altClicked(int index)
 
     default property alias content: body.data
 
@@ -39,12 +29,27 @@ PanelWindow {
         root.expanded = true;
     }
 
+    function trackAt(x: real): int {
+        let nearest = -1;
+        let nearestDistance = Infinity;
+        for (let i = 0; i < root.tracks.length; i++) {
+            const track = root.tracks[i];
+            const distance = Math.abs(track.mapToItem(body, track.width / 2, 0).x - x);
+            if (distance < nearestDistance) {
+                nearest = i;
+                nearestDistance = distance;
+            }
+        }
+        return nearest;
+    }
+
     function emitSlide(y: real) {
-        if (!root.track)
+        const track = root.tracks[hover.dragIndex];
+        if (!track)
             return;
 
-        const point = hover.mapToItem(root.track, 0, y);
-        root.slid(Math.max(0, Math.min(1, 1 - point.y / root.track.height)));
+        const point = hover.mapToItem(track, 0, y);
+        root.slid(hover.dragIndex, Math.max(0, Math.min(1, 1 - point.y / track.height)));
     }
 
     WlrLayershell.namespace: root.layerNamespace
@@ -120,12 +125,13 @@ PanelWindow {
     MouseArea {
         id: hover
 
-        // while collapsed the strip has to hug the screen edge itself, which is
-        // the far side of the window when anchored right
         x: root.onRight && !root.expanded ? root.expandedWidth - root.collapsedWidth : 0
         y: Math.round((root.height - root.bandHeight) / 2)
         width: root.expanded ? root.expandedWidth : root.collapsedWidth
         height: root.bandHeight
+
+        // the track a drag started on, so the drag stays on it
+        property int dragIndex: -1
 
         hoverEnabled: true
         preventStealing: true
@@ -134,21 +140,29 @@ PanelWindow {
         onEntered: root.reveal()
         onExited: collapseTimer.restart()
 
+        // the track is picked before reveal(), which moves the hover area
+        // and so the meaning of event.x
         onWheel: event => {
+            const index = root.trackAt(hover.x + event.x);
             root.reveal();
 
             const delta = event.angleDelta.y !== 0 ? event.angleDelta.y : event.angleDelta.x;
-            if (delta !== 0)
-                root.scrolled(delta > 0 ? 1 : -1);
+            if (index >= 0 && delta !== 0)
+                root.scrolled(index, delta > 0 ? 1 : -1);
         }
 
         onPressed: event => {
+            const index = root.trackAt(hover.x + event.x);
             root.reveal();
 
-            if (event.button === Qt.RightButton)
-                root.altClicked();
-            else
+            if (index < 0)
+                return;
+            if (event.button === Qt.RightButton) {
+                root.altClicked(index);
+            } else {
+                hover.dragIndex = index;
                 root.emitSlide(event.y);
+            }
         }
 
         onPositionChanged: event => {

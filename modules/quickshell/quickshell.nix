@@ -84,7 +84,7 @@ in {
         expandedWidth = lib.mkOption {
           type = lib.types.int;
           default = 54;
-          description = "Width of the slider once it opens.";
+          description = "Width of one bar once the panel opens; the panel holds two, speaker and mic.";
         };
 
         bandHeight = lib.mkOption {

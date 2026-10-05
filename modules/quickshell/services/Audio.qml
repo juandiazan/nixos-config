@@ -2,9 +2,6 @@ pragma Singleton
 import Quickshell
 import Quickshell.Services.Pipewire
 
-// The default audio sink as live-bound properties. Reads and writes go
-// straight to pipewire, so the widget follows volume keys and other apps
-// instead of polling pactl.
 Singleton {
     id: root
 
@@ -13,9 +10,13 @@ Singleton {
     readonly property real volume: root.sink?.audio?.volume ?? 0
     readonly property bool muted: root.sink?.audio?.muted ?? false
 
+    readonly property PwNode source: Pipewire.defaultAudioSource
+    readonly property real micVolume: root.source?.audio?.volume ?? 0
+    readonly property bool micMuted: root.source?.audio?.muted ?? false
+
     // without this the sink's audio properties are never bound
     PwObjectTracker {
-        objects: [root.sink]
+        objects: [root.sink, root.source]
     }
 
     function setVolume(value: real) {
@@ -34,5 +35,23 @@ Singleton {
 
     function toggleMute() {
         root.setMuted(!root.muted);
+    }
+
+    function setMicVolume(value: real) {
+        if (root.source?.audio)
+            root.source.audio.volume = Math.max(0, Math.min(1, value));
+    }
+
+    function addMicVolume(delta: real) {
+        root.setMicVolume(root.micVolume + delta);
+    }
+
+    function setMicMuted(value: bool) {
+        if (root.source?.audio)
+            root.source.audio.muted = value;
+    }
+
+    function toggleMicMute() {
+        root.setMicMuted(!root.micMuted);
     }
 }
