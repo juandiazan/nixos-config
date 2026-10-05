@@ -7,8 +7,8 @@ Singleton {
 
     readonly property PwNode sink: Pipewire.defaultAudioSink
     readonly property bool ready: root.sink?.ready ?? false
-    readonly property real volume: root.sink?.audio?.volume ?? 0
-    readonly property bool muted: root.sink?.audio?.muted ?? false
+    readonly property real outputVolume: root.sink?.audio?.volume ?? 0
+    readonly property bool outputMuted: root.sink?.audio?.muted ?? false
 
     readonly property PwNode source: Pipewire.defaultAudioSource
     readonly property real micVolume: root.source?.audio?.volume ?? 0
@@ -19,22 +19,22 @@ Singleton {
         objects: [root.sink, root.source]
     }
 
-    function setVolume(value: real) {
+    function setOutputVolume(value: real) {
         if (root.sink?.audio)
             root.sink.audio.volume = Math.max(0, Math.min(1, value));
     }
 
-    function addVolume(delta: real) {
-        root.setVolume(root.volume + delta);
+    function addOutputVolume(delta: real) {
+        root.setOutputVolume(root.outputVolume + delta);
     }
 
-    function setMuted(value: bool) {
+    function setOutputMuted(value: bool) {
         if (root.sink?.audio)
             root.sink.audio.muted = value;
     }
 
-    function toggleMute() {
-        root.setMuted(!root.muted);
+    function toggleOutputMute() {
+        root.setOutputMuted(!root.outputMuted);
     }
 
     function setMicVolume(value: real) {
