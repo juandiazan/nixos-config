@@ -6,7 +6,7 @@ ShellRoot {
     Variants {
         model: Quickshell.screens.filter(screen => Config.monitor === "" || screen.name === Config.monitor)
 
-        AudioPanel {
+        SliderPanel {
             required property var modelData
 
             screen: modelData

@@ -27,7 +27,7 @@
         quickshell = {
           enable = true;
           monitor = "DP-3";
-          volume.edge = "left";
+          sliders.edge = "left";
         };
 
         hyprland.monitors = {

@@ -1,16 +1,16 @@
 import QtQuick
 import qs
 
-// One bar of the audio panel: the fill shows the level, with an icon and the
+// One bar of the slider panel: the fill shows the level, with an icon and the
 // percentage underneath. Only draws; the panel handles the mouse.
 Item {
     id: root
 
-    property real volume: 0
+    property real value: 0
     property bool muted: false
     property string icon: ""
 
-    readonly property real level: Math.min(1, root.volume)
+    readonly property real level: Math.min(1, root.value)
     readonly property Item track: trackRect
 
     Rectangle {
@@ -70,7 +70,7 @@ Item {
             horizontalCenter: parent.horizontalCenter
             bottomMargin: 10
         }
-        text: Math.round(root.volume * 100)
+        text: Math.round(root.value * 100)
         font.family: Theme.fontFamily
         font.pixelSize: 14
         color: Theme.whiteDim

@@ -48,7 +48,7 @@
         quickshell = {
           enable = true;
           monitor = "eDP-1";
-          volume.edge = "right";
+          sliders.edge = "right";
         };
 
         hyprland.monitors.eDP-1 = {

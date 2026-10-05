@@ -36,13 +36,13 @@ in {
       Singleton {
           readonly property string monitor: ${builtins.toJSON cfg.monitor};
 
-          readonly property QtObject volume: QtObject {
-              readonly property bool onRight: ${lib.boolToString (cfg.volume.edge == "right")};
-              readonly property int collapsedWidth: ${toString cfg.volume.collapsedWidth};
-              readonly property int expandedWidth: ${toString cfg.volume.expandedWidth};
-              readonly property int bandHeight: ${toString cfg.volume.bandHeight};
-              readonly property real step: ${toString cfg.volume.step};
-              readonly property bool handle: ${lib.boolToString cfg.volume.handle};
+          readonly property QtObject sliders: QtObject {
+              readonly property bool onRight: ${lib.boolToString (cfg.sliders.edge == "right")};
+              readonly property int collapsedWidth: ${toString cfg.sliders.collapsedWidth};
+              readonly property int expandedWidth: ${toString cfg.sliders.expandedWidth};
+              readonly property int bandHeight: ${toString cfg.sliders.bandHeight};
+              readonly property real step: ${toString cfg.sliders.step};
+              readonly property bool handle: ${lib.boolToString cfg.sliders.handle};
           }
       }
     '';
@@ -68,23 +68,23 @@ in {
         description = "Font used by the widgets, needs the nerd font glyphs.";
       };
 
-      volume = {
+      sliders = {
         edge = lib.mkOption {
           type = lib.types.enum ["left" "right"];
           default = "left";
-          description = "Screen edge the slider hides against.";
+          description = "Screen edge the panel hides against.";
         };
 
         collapsedWidth = lib.mkOption {
           type = lib.types.int;
           default = 6;
-          description = "Width of the hover strip while the slider is closed.";
+          description = "Width of the hover strip while the panel is closed.";
         };
 
         expandedWidth = lib.mkOption {
           type = lib.types.int;
           default = 54;
-          description = "Width of one bar once the panel opens; the panel holds two, output and mic.";
+          description = "Width of one bar once the panel opens; the panel grows with the number of bars.";
         };
 
         bandHeight = lib.mkOption {
@@ -96,13 +96,13 @@ in {
         step = lib.mkOption {
           type = lib.types.float;
           default = 0.02;
-          description = "Volume change per scroll notch, 0.0 to 1.0.";
+          description = "Change per scroll notch on any bar, 0.0 to 1.0.";
         };
 
         handle = lib.mkOption {
           type = lib.types.bool;
           default = true;
-          description = "Show a sliver on the edge hinting the slider is there.";
+          description = "Show a sliver on the edge hinting the panel is there.";
         };
       };
     };
