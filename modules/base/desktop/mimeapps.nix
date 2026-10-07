@@ -1,6 +1,5 @@
 {
   flake.modules.homeManager.base = let
-    browser = "firefox.desktop";
     image = "org.gnome.Loupe.desktop";
     media = "vlc.desktop";
     editor = "org.gnome.TextEditor.desktop";
@@ -9,23 +8,6 @@
     writer = "writer.desktop";
     calc = "calc.desktop";
     impress = "impress.desktop";
-
-    browserTypes = [
-      "text/html"
-      "application/xhtml+xml"
-      "application/pdf"
-      "application/x-extension-htm"
-      "application/x-extension-html"
-      "application/x-extension-shtml"
-      "application/x-extension-xhtml"
-      "application/x-extension-xht"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/about"
-      "x-scheme-handler/unknown"
-      "x-scheme-handler/chrome"
-      "x-scheme-handler/mailto"
-    ];
 
     imageTypes = [
       "image/png"
@@ -106,11 +88,11 @@
       enable = true;
 
       defaultApplications =
-        assign browser browserTypes
-        // assign image imageTypes
+        assign image imageTypes
         // assign media mediaTypes
         // assign editor editorTypes
         // assign files ["inode/directory"]
+        // assign "zen-beta.desktop" ["application/pdf"] # setAsDefaultBrowser in zen.nix covers links and html, not pdfs
         // assign writer [
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           "application/msword"

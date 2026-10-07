@@ -5,7 +5,7 @@
 --- PROGRAMS
 local terminal = "kitty"
 local fileManager = "nautilus"
-local browser = "firefox"
+local browser = "zen-beta"
 
 local scriptsPath = os.getenv("HOME") .. "/nixos-config/scripts/"
 
