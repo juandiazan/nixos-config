@@ -67,10 +67,8 @@
       extraLuaFiles.binds = ./binds.lua;
     };
 
-    # called from binds.lua: colour picker, screenshots, logout
     config.home.packages = with pkgs; [
       hyprpicker
-      hyprshot
       hyprshutdown
     ];
   };
