@@ -34,7 +34,7 @@
     "size": {
       "maxPrefix": "YB",
       "binaryPrefix": "iec",
-      "ndigits": 2,
+      "ndigits": 1,
       "spaceBeforeUnit": "default"
     },
     "temp": {
@@ -114,10 +114,13 @@
       "color": {
         "user": "#FCF1DF",
         "at": "#FCF1DF",
-        "host": "#FCF1DF",
+        "host": "#FCF1DF"
       }
     },
-    { "type": "custom", "format": "\u001b[38;2;8;63;132m==================== OS ====================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;8;63;132m==================== OS ====================\u001b[0m"
+    },
     {
       "type": "os",
       "keyColor": "#083f84",
@@ -138,7 +141,10 @@
       "keyColor": "#083f84",
       "keyIcon": "󱎫"
     },
-    { "type": "custom", "format": "\u001b[38;2;112;75;182m================= Hardware =================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;112;75;182m================= Hardware =================\u001b[0m"
+    },
     {
       "type": "host",
       "keyColor": "#704bb6",
@@ -156,6 +162,7 @@
     },
     {
       "type": "battery",
+      "key": "Battery",
       "keyColor": "#704bb6",
       "keyIcon": "",
       "temp": false,
@@ -192,7 +199,10 @@
         "type": 0
       }
     },
-    { "type": "custom", "format": "\u001b[38;2;5;143;143m================== Specs ===================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;5;143;143m================== Specs ===================\u001b[0m"
+    },
     {
       "type": "cpu",
       "keyColor": "#058f8f",
@@ -246,7 +256,10 @@
         "type": 0
       }
     },
-    { "type": "custom", "format": "\u001b[38;2;85;212;178m================= Desktop ==================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;85;212;178m================= Desktop ==================\u001b[0m"
+    },
     {
       "type": "display",
       "keyColor": "#55d4b2",
@@ -282,7 +295,10 @@
       "keyColor": "#55d4b2",
       "keyIcon": "󰆿"
     },
-    { "type": "custom", "format": "\u001b[38;2;225;71;109m================= Terminal =================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;225;71;109m================= Terminal =================\u001b[0m"
+    },
     {
       "type": "shell",
       "keyColor": "#e1476d",
@@ -303,7 +319,10 @@
       "keyColor": "#e1476d",
       "keyIcon": "󱞎"
     },
-    { "type": "custom", "format": "\u001b[38;2;197;5;42m================== Others ==================\u001b[0m" },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;197;5;42m================== Others ==================\u001b[0m"
+    },
     {
       "type": "datetime",
       "keyColor": "#c5052a",
