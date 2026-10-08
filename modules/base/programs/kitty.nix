@@ -5,7 +5,7 @@ in {
     enable = true;
 
     font = {
-      name = "GoMono Nerd Font";
+      name = "BigBlueTermPlus Nerd Font Mono";
       size = 10.0;
     };
 
