@@ -18,5 +18,5 @@ Should have the following categories:
 
 - gaming -> includes:
   - steam and necessary tools to run games correctly
+  - minecraft
   - drivers for GPU's
-  
