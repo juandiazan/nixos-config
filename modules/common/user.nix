@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.base.users.users.juani = {
+  flake.modules.nixos.common.users.users.juani = {
     isNormalUser = true;
     description = "Juan";
     extraGroups = ["wheel"];

@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.base = {
+  flake.modules.nixos.common = {
     time.timeZone = "America/Montevideo";
 
     i18n = {

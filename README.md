@@ -2,6 +2,8 @@
 
 Should have the following categories:
 
+- common -> every machine, server included (user, locale and keyboard layout, nix settings)
+
 - base -> includes:
   - base system configuration (boot settings, audio, network, users, etc)
   - desktop environment/window manager, status bar, notifications, gtk, etc
