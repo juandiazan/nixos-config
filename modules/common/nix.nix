@@ -13,5 +13,11 @@
         options = "--delete-older-than 14d";
       };
     };
+
+    environment.shellAliases = {
+      rebuild = "sudo nixos-rebuild switch -L --flake ~/nixos-config";
+      update = "sudo nix flake update --flake ~/nixos-config";
+      rollback = "sudo nixos-rebuild switch --rollback";
+    };
   };
 }
