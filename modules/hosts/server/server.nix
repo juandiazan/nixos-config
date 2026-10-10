@@ -40,6 +40,8 @@
       programs.git.enable = true;
 
       zramSwap.enable = true;
+
+      environment.enableAllTerminfo = true;
     };
   };
 }
