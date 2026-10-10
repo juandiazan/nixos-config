@@ -41,7 +41,10 @@
 
       zramSwap.enable = true;
 
-      environment.systemPackages = [pkgs.kitty.terminfo];
+      environment.systemPackages = [
+        pkgs.kitty.terminfo
+        pkgs.parted
+      ];
     };
   };
 }
