@@ -11,7 +11,7 @@
       ];
     };
 
-    modules.nixos.server = {
+    modules.nixos.server = {pkgs, ...}: {
       imports = [./_hardware-configuration.nix];
 
       networking.hostName = "nixos-server";
@@ -41,7 +41,7 @@
 
       zramSwap.enable = true;
 
-      environment.enableAllTerminfo = true;
+      environment.systemPackages = [pkgs.kitty.terminfo];
     };
   };
 }
