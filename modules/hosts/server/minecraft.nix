@@ -32,5 +32,16 @@
         sloureiro = "82d66e08-20cc-49b5-8072-d10d3720b1ec";
       };
     };
+
+    users.users.juani.extraGroups = ["minecraft"];
+
+    environment.systemPackages = [
+      (pkgs.writeShellScriptBin "mc" ''
+        since=$(date +%s)
+        echo "$*" > /run/minecraft-server.stdin
+        sleep 1
+        journalctl -u minecraft-server --since "@$since" -o cat --no-pager
+      '')
+    ];
   };
 }
