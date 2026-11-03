@@ -1,7 +1,7 @@
 {
   flake.modules.homeManager.shell.home.shellAliases = {
     cls = "clear";
-    lzg = "lazygit";
+    lg = "lazygit";
     rip = "abcde";
     v = "nvim";
 

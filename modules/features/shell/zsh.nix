@@ -15,7 +15,6 @@
       theme = "obraun";
       plugins = [
         "aliases"
-        "alias-finder"
         "command-not-found"
         "colored-man-pages"
         "git"
@@ -40,7 +39,6 @@
       if command -v eza &> /dev/null; then
        alias ls='eza'
        alias lt='eza --tree --level=2'
-       alias lta='lt -a'
       fi
       fastfetch
     '';
