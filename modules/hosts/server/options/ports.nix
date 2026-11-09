@@ -19,7 +19,6 @@
         trilium = 8002;
         karakeep = 8003;
         scrutiny = 7000;
-        nextcloud = 80;
       };
 
       assertions = [

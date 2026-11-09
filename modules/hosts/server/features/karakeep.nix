@@ -4,7 +4,7 @@
       enable = true;
       extraEnvironment = {
         PORT = toString config.ports.karakeep;
-        NEXTAUTH_URL = "${config.serverUrl}:${toString config.ports.karakeep}";
+        NEXTAUTH_URL = "https://bookmarks.${config.serverDomain}";
         DISABLE_SIGNUPS = "true";
       };
     };

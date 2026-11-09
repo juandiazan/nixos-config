@@ -2,7 +2,7 @@
   flake.modules.nixos.serverConfiguration = {config, ...}: {
     services.trilium-server = {
       enable = true;
-      host = "0.0.0.0";
+      host = "127.0.0.1";
       port = config.ports.trilium;
       dataDir = "/data/trilium";
       noBackup = false;

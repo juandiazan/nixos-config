@@ -8,9 +8,8 @@
   in {
     services.homepage-dashboard = {
       enable = true;
-      openFirewall = true;
       listenPort = ports.homepage;
-      allowedHosts = "${config.serverHost}:${toString ports.homepage}";
+      allowedHosts = "dashboard.${config.serverDomain}";
       environmentFiles = ["/etc/homepage-secrets"];
 
       widgets = [
@@ -54,7 +53,7 @@
             {
               "Immich" = {
                 icon = "immich.png";
-                href = "${config.serverUrl}:${toString ports.immich}";
+                href = "https://photos.${config.serverDomain}";
                 siteMonitor = "http://localhost:${toString ports.immich}";
                 widget = {
                   type = "immich";
@@ -67,11 +66,11 @@
             {
               "Nextcloud" = {
                 icon = "nextcloud.png";
-                href = "${config.serverUrl}:${toString ports.nextcloud}";
-                siteMonitor = "http://localhost:${toString ports.nextcloud}/status.php";
+                href = "https://cloud.${config.serverDomain}";
+                siteMonitor = "https:/cloud.${config.serverDomain}/status.php";
                 widget = {
                   type = "nextcloud";
-                  url = "http://localhost:${toString ports.nextcloud}";
+                  url = "https://cloud.${config.serverDomain}";
                   key = "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}";
                 };
               };
@@ -83,7 +82,7 @@
                 siteMonitor = "http://localhost:${toString ports.trilium}";
                 widget = {
                   type = "trilium";
-                  url = "http://localhost:${toString ports.trilium}";
+                  url = "https://notes.${config.serverDomain}";
                   key = "{{HOMEPAGE_VAR_TRILIUM_KEY}}";
                 };
               };
@@ -95,7 +94,7 @@
                 siteMonitor = "http://localhost:${toString ports.karakeep}";
                 widget = {
                   type = "karakeep";
-                  url = "http://localhost:${toString ports.karakeep}";
+                  url = "https://bookmarks.${config.serverDomain}";
                   key = "{{HOMEPAGE_VAR_KARAKEEP_KEY}}";
                 };
               };
@@ -106,7 +105,7 @@
                 href = "${config.serverUrl}:${toString ports.scrutiny}";
                 widget = {
                   type = "scrutiny";
-                  url = "http://localhost:${toString ports.scrutiny}";
+                  url = "https://disks.${config.serverDomain}";
                 };
               };
             }
