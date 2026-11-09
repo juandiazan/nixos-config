@@ -8,6 +8,7 @@
       enable = true;
       package = pkgs.nextcloud35;
       hostName = "cloud.${config.serverDomain}";
+      https = true;
       datadir = "/data/nextcloud";
       database.createLocally = true;
       configureRedis = true;

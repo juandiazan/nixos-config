@@ -67,7 +67,7 @@
               "Nextcloud" = {
                 icon = "nextcloud.png";
                 href = "https://cloud.${config.serverDomain}";
-                siteMonitor = "https:/cloud.${config.serverDomain}/status.php";
+                siteMonitor = "https://cloud.${config.serverDomain}/status.php";
                 widget = {
                   type = "nextcloud";
                   url = "https://cloud.${config.serverDomain}";
@@ -78,7 +78,7 @@
             {
               "Trilium" = {
                 icon = "trilium.png";
-                href = "${config.serverUrl}:${toString ports.trilium}";
+                href = "https://notes.${config.serverDomain}";
                 siteMonitor = "http://localhost:${toString ports.trilium}";
                 widget = {
                   type = "trilium";
@@ -90,7 +90,7 @@
             {
               "Karakeep" = {
                 icon = "karakeep.png";
-                href = "${config.serverUrl}:${toString ports.karakeep}";
+                href = "https://bookmarks.${config.serverDomain}";
                 siteMonitor = "http://localhost:${toString ports.karakeep}";
                 widget = {
                   type = "karakeep";
@@ -102,7 +102,7 @@
             {
               "Scrutiny" = {
                 icon = "scrutiny.png";
-                href = "${config.serverUrl}:${toString ports.scrutiny}";
+                href = "https://disks.${config.serverDomain}";
                 widget = {
                   type = "scrutiny";
                   url = "https://disks.${config.serverDomain}";

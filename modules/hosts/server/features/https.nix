@@ -18,6 +18,8 @@
     security.acme = {
       acceptTerms = true;
       defaults.email = "jidp99@proton.me";
+      # staging: test certs that browsers don't trust; remove once the cert is issued
+      defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";
       certs.${domain} = {
         domain = "*.${domain}";
         dnsProvider = "porkbun";
