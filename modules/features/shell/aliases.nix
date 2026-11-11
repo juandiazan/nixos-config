@@ -6,6 +6,7 @@
     v = "nvim";
 
     enc = "tmux new-session -A -s nixos-config -c ~/nixos-config nvim .";
+
     dei = "devenv init";
     dea = "devenv allow";
 
@@ -15,6 +16,11 @@
     tp = "terraform plan";
     ta = "terraform apply";
     td = "terraform destroy";
+
+    dcu = "docker compose up";
+    dcub = "docker compose up --build";
+    dcs = "docker compose stop";
+    dcd = "docker compose down";
 
     "ls-status" = "~/nixos-config/scripts/network/localsend-toggle.sh status";
     "ls-on" = "~/nixos-config/scripts/network/localsend-toggle.sh on";
