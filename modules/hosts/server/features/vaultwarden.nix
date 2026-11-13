@@ -7,7 +7,7 @@
       config = {
         ROCKET_ADDRESS = "127.0.0.1";
         ROCKET_PORT = config.ports.vaultwarden;
-        SIGNUPS_ALLOWED = true;
+        SIGNUPS_ALLOWED = false;
         INVITATIONS_ALLOWED = false;
         SHOW_PASSWORD_HINT = false;
       };
