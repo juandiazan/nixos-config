@@ -13,9 +13,14 @@
         "/data/immich"
         "/data/trilium/backup" # trilium's own daily/weekly/monthly db snapshots
         "/data/karakeep"
+        "/data/vaultwarden"
         "/var/backup" # database dump, see ExecStartPre
       ];
-      exclude = ["/data/karakeep/db.db*"];
+      exclude = [
+        "/data/karakeep/db.db*"
+        "/data/vaultwarden/db.sqlite3*"
+        "/data/vaultwarden/icon_cache"
+      ];
       repo = "/backup/borg";
       encryption = {
         mode = "repokey-blake2";
@@ -53,6 +58,11 @@
           ${pkgs.util-linux}/bin/runuser -u karakeep -- \
             ${pkgs.sqlite}/bin/sqlite3 /data/karakeep/db.db .dump > /var/backup/karakeep.sql
           chmod 600 /var/backup/karakeep.sql
+
+          # vaultwarden
+          ${pkgs.util-linux}/bin/runuser -u vaultwarden -- \
+            ${pkgs.sqlite}/bin/sqlite3 /data/vaultwarden/db.sqlite3 .dump > /var/backup/vaultwarden.sql
+          chmod 600 /var/backup/vaultwarden.sql
         ''}"
       ];
       ExecStopPost = ["+${occ} maintenance:mode --off"];

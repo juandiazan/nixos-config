@@ -13,6 +13,7 @@
       notes = ports.trilium;
       bookmarks = ports.karakeep;
       disks = ports.scrutiny;
+      vault = ports.vaultwarden;
     };
   in {
     services.nginx = {

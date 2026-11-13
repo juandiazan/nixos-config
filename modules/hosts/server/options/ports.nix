@@ -6,7 +6,6 @@
   }: let
     values = lib.attrValues config.ports;
   in {
-    # every app port lives here, so a port can't end up used by two services
     options.ports = lib.mkOption {
       type = lib.types.attrsOf lib.types.port;
       description = "Port of each self-hosted app.";
@@ -18,6 +17,7 @@
         immich = 8001;
         trilium = 8002;
         karakeep = 8003;
+        vaultwarden = 8004;
         scrutiny = 7000;
       };
 

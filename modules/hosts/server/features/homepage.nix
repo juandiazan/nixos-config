@@ -100,6 +100,13 @@
               };
             }
             {
+              "Vaultwarden" = {
+                icon = "vaultwarden.png";
+                href = "https://vault.${config.serverDomain}";
+                siteMonitor = "http://localhost:${toString ports.vaultwarden}/alive";
+              };
+            }
+            {
               "Scrutiny" = {
                 icon = "scrutiny.png";
                 href = "https://disks.${config.serverDomain}";
