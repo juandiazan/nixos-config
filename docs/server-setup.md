@@ -79,21 +79,18 @@ sudo BORG_PASSCOMMAND='cat /etc/borg-passphrase' borg list /backup/borg
 ## Nextcloud 
 Nextcloud is used as a self-hosted replacement for OneDrive/Google Drive (file storage and sync). The files are stored in `/data/nextcloud`. To set it up the following steps should be followed:
 
-1. Create the file that stores the admin password with `sudo sh -c 'printf "%s" "<password>" > /etc/nextcloud-admin-pass'` (`printf` is used so the file doesn't end with a newline, which would become part of the password).
-2. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/nextcloud-admin-pass`.
-3. Make sure the data disk is mounted with `findmnt /data`. Nextcloud won't start without it.
-4. Run `rebuild`. The password file must exist before this, otherwise the first setup fails. It's only read on the first install; after that the password is changed from the web UI.
-5. Verify with `systemctl status nextcloud-setup phpfpm-nextcloud nginx` and `sudo nextcloud-occ status`. It should say `installed: true`.
-6. Open `http://nixos-server` and log in with the user `juani` and the password from step 1.
-7. On computers, access the files from the browser at `http://nixos-server`. On phones, install the Nextcloud app and use `http://nixos-server` as the server address.
+1. Make sure the data disk is mounted with `findmnt /data`. Nextcloud won't start without it.
+2. Run `rebuild`. The first setup installs Nextcloud **without any user**: NixOS no longer creates an admin account (the old `adminuser`/`adminpassFile` options were removed), so it's created by hand in the next steps.
+3. Verify with `systemctl status nextcloud-setup phpfpm-nextcloud nginx` and `sudo nextcloud-occ status`. It should say `installed: true`.
+4. Create the user with `sudo nextcloud-occ user:add juani`. It asks for the password twice. Typing it at the prompt keeps it out of the shell history and off the disk.
+5. Make it an admin with `sudo nextcloud-occ group:adduser admin juani`. If it says the group doesn't exist, create it first with `sudo nextcloud-occ group:add admin`.
+6. Verify with `sudo nextcloud-occ user:info juani`, `groups` should include `admin`.
+7. Open `https://cloud.home.juandiazan.dev` and log in with the user `juani` and the password from step 4. After this, the password is changed from the web UI (Personal settings → Security).
+8. On computers, access the files from the browser at `https://cloud.home.juandiazan.dev`. On phones, install the Nextcloud app and use `https://cloud.home.juandiazan.dev` as the server address.
 
 Commands:
 
 ```bash
-# === admin password ===
-sudo sh -c 'printf "%s" "<password>" > /etc/nextcloud-admin-pass'
-sudo chmod 600 /etc/nextcloud-admin-pass
-
 findmnt /data
 
 nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
@@ -101,6 +98,13 @@ nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
 # === verification ===
 systemctl status nextcloud-setup phpfpm-nextcloud nginx
 sudo nextcloud-occ status
+
+# === admin user ===
+sudo nextcloud-occ user:add juani # asks for the password
+sudo nextcloud-occ group:adduser admin juani # if the group is missing: sudo nextcloud-occ group:add admin
+
+# === verification ===
+sudo nextcloud-occ user:info juani
 ```
 
 ### Importing existing files
@@ -116,7 +120,61 @@ sudo nextcloud-occ files:scan juani
 ### Notes
 
 - Major version upgrades (e.g. `nextcloud35` → `nextcloud36`) must be done one version at a time.
+- If the admin password is lost, reset it with `sudo nextcloud-occ user:resetpassword juani`.
 - Backups (files and database) run every night, see [backup-setup.md](backup-setup.md).
+
+## Vaultwarden
+
+Vaultwarden is used as a self-hosted password manager. It's a lightweight server that works with the official Bitwarden apps and browser extensions. It's served at `https://vault.home.juandiazan.dev` and its data is stored in `/data/vaultwarden`, which is bind-mounted onto `/var/lib/vaultwarden`. The settings are in `vaultwarden.nix`, and the only secret, the admin page token, is in `/etc/vaultwarden-secrets`. To set it up the following steps should be followed:
+
+1. Generate a random admin token with `head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo` and save it somewhere safe outside the vault (it's needed to open the admin page, and the vault could be the thing that's broken).
+2. Hash it with `nix shell nixpkgs#vaultwarden -c vaultwarden hash`. It asks for the token twice and prints a line like `ADMIN_TOKEN='$argon2id$...'`. Only the hash is stored on the server, so someone who reads the file still can't log into the admin page.
+3. Create and edit the file where the secret will be stored with `sudoedit /etc/vaultwarden-secrets`.
+4. Paste the whole line printed in step 2, single quotes included. The `$` characters must stay as they are: systemd reads this file without expanding variables, so they don't have to be escaped as `$$` like some guides say (that's for Docker Compose).
+5. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/vaultwarden-secrets`.
+6. Make sure the data disk is mounted with `findmnt /data`. Vaultwarden won't start without it.
+7. Run `rebuild`. The secrets file must exist before this, otherwise Vaultwarden fails to start with `Failed to load environment files`.
+8. Verify with `systemctl status vaultwarden` and `findmnt /var/lib/vaultwarden`, it should show `/data/vaultwarden` as the source. Also verify with `curl http://127.0.0.1:8004/alive`, it should return the current date.
+9. Open `https://vault.home.juandiazan.dev` and create an account with an email and a strong master password. **The master password can't be recovered or reset**: it's the key the vault is encrypted with. Save it outside the server (paper).
+10. Disable new sign-ups by setting `SIGNUPS_ALLOWED = false` in `vaultwarden.nix` and running `rebuild` (it restarts Vaultwarden by itself). Until this is done, anyone who can reach the page can create an account.
+11. Enable two-step login from Settings → Security → Two-step login (an authenticator app or a security key).
+12. Open `https://vault.home.juandiazan.dev/admin`, log in with the token from step 1 (the plain one, not the hash) and check that everything is green in Diagnostics. **Don't save settings from the admin page** (see notes).
+13. Install the Bitwarden app on every device (browser extension, desktop and phone). On the login screen choose **self-hosted** as the server and enter `https://vault.home.juandiazan.dev`.
+
+Commands:
+
+```bash
+# === admin token ===
+head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo
+# save it somewhere safe outside the vault
+nix shell nixpkgs#vaultwarden -c vaultwarden hash
+
+# === secrets ===
+sudoedit /etc/vaultwarden-secrets
+# paste ADMIN_TOKEN='<hash>'
+sudo chmod 600 /etc/vaultwarden-secrets
+
+findmnt /data
+
+nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+
+# === verification ===
+systemctl status vaultwarden
+findmnt /var/lib/vaultwarden
+curl http://127.0.0.1:8004/alive
+
+# === after creating the account ===
+# set SIGNUPS_ALLOWED = false in vaultwarden.nix
+nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+```
+
+### Notes
+
+- Vaultwarden only reads `/etc/vaultwarden-secrets` when it starts, and a rebuild doesn't restart it if only that file changed. After editing it, run `sudo systemctl restart vaultwarden`. Changes in `vaultwarden.nix` are applied by `rebuild`.
+- Settings saved from the admin page are written to `/data/vaultwarden/config.json` and **override** the ones in `vaultwarden.nix`. Only use the admin page to look at things (users, diagnostics). If a setting from `vaultwarden.nix` seems to be ignored, check if that file exists.
+- The apps keep an offline copy of the vault, so passwords can still be read without Tailscale, but they only sync (and new items only reach the server) when Tailscale is running.
+- `/data/vaultwarden/rsa_key.pem` signs the login sessions. If it's lost, every device is logged out and has to log in again.
+- Backups (attachments, keys and a dump of the database) run every night, see [backup-setup.md](backup-setup.md). Restoring is explained in [Vaultwarden](backup-setup.md#vaultwarden).
 
 ## Homepage 
 
@@ -169,7 +227,7 @@ nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 
 # === verification ===
-curl -H "NC-Token: <token>" "http://localhost/ocs/v2.php/apps/serverinfo/api/v1/info?format=json"
+curl -H "NC-Token: <token>" "https://cloud.home.juandiazan.dev/ocs/v2.php/apps/serverinfo/api/v1/info?format=json"
 sudo nextcloud-occ app:list | grep serverinfo
 ```
 
@@ -220,17 +278,61 @@ sudo systemctl restart homepage-dashboard
 curl -H "Authorization: <token>" "http://localhost:8002/etapi/metrics?format=json"
 ```
 
+## HTTPS
+
+Every app is served over HTTPS with a single wildcard certificate for `*.home.juandiazan.dev`, issued by Let's Encrypt. The config is in `https.nix`. Since the server isn't reachable from the internet (see [Tailscale](#tailscale)), Let's Encrypt can't check it over HTTP. It uses the **DNS challenge** instead: the server proves it owns the domain by creating a temporary `TXT` record at Porkbun through its API, so it needs Porkbun API keys stored in `/etc/acme-porkbun`. To set it up the following steps should be followed:
+
+1. In Porkbun, create an API key from Account → API Access (https://porkbun.com/account/api). It gives two values, the API key (`pk1_...`) and the secret key (`sk1_...`). The secret is only shown once.
+2. Enable API access for the domain: in Domain Management, open `juandiazan.dev`'s details and turn on **API Access**. Without this the keys work, but the server can't edit this domain's records.
+3. Create and edit the file where the keys will be stored with `sudoedit /etc/acme-porkbun`.
+4. Enter both keys with the following format, one per line: `PORKBUN_API_KEY=<api-key>` and `PORKBUN_SECRET_API_KEY=<secret-key>`.
+5. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/acme-porkbun`.
+6. Run `rebuild`. The file must exist before this, otherwise the certificate request fails. Until the real certificate is issued, nginx uses a temporary self-signed one, so browsers show a warning for a minute or two.
+7. Verify with `systemctl status acme-order-renew-home.juandiazan.dev` and `journalctl -u acme-order-renew-home.juandiazan.dev`. The log should end with the certificate being obtained, without errors.
+8. Also verify with the `curl` command below, it should show `CN=*.home.juandiazan.dev` as the subject, Let's Encrypt as the issuer and an expiry date about 90 days ahead. Then open `https://dashboard.home.juandiazan.dev` and check the browser doesn't show any warning.
+9. Check the renewal timer is active with `systemctl list-timers 'acme-renew-*'`.
+
+Commands:
+
+```bash
+# === porkbun keys ===
+sudoedit /etc/acme-porkbun
+# write PORKBUN_API_KEY=<api-key>
+# write PORKBUN_SECRET_API_KEY=<secret-key>
+sudo chmod 600 /etc/acme-porkbun
+
+nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+
+# === verification ===
+systemctl status acme-order-renew-home.juandiazan.dev
+journalctl -u acme-order-renew-home.juandiazan.dev
+curl -sv -o /dev/null https://dashboard.home.juandiazan.dev 2>&1 | grep -E "subject:|issuer:|expire date:"
+systemctl list-timers 'acme-renew-*'
+```
+
+### Notes
+
+- The certificate lasts 90 days. The timer checks it every day and renews it when there are less than 30 days left, so nothing has to be done by hand.
+- The certificate is stored in `/var/lib/acme/home.juandiazan.dev`, readable by nginx (`group` in `https.nix`). It isn't backed up: if it's lost, a rebuild just requests a new one.
+- `dnsResolver = "1.1.1.1:53"` makes the server check that the `TXT` record is visible from outside before asking Let's Encrypt to validate it, instead of asking the local DNS (which goes through Tailscale's MagicDNS).
+- Let's Encrypt limits how many certificates can be requested for the same names (5 per week). To debug a failing setup without hitting the limit, temporarily add `security.acme.defaults.server = "https://acme-staging-v02.api.letsencrypt.org/directory";` to `https.nix`. Staging certificates aren't trusted by browsers, so remove the line once it works and run `rebuild` again.
+- New apps don't need anything here: the wildcard certificate already covers every `<app>.home.juandiazan.dev`.
+
 ## Tailscale
 
-Tailscale gives remote access to every service without opening ports to the internet. The server and each device join the same tailnet, and MagicDNS makes `nixos-server` resolve to the server from any of them. All service URLs use `nixos-server` (see `options/url.nix`), so **every device that uses the server needs Tailscale running, even at home**. On the LAN the traffic still goes directly between devices.
+Tailscale gives remote access to every service without opening ports to the internet. The server and each device join the same tailnet, and the server's firewall only lets the services through on the Tailscale interface.
+
+Each app has its own subdomain, `<app>.home.juandiazan.dev` (the domain is in `options/url.nix` and the subdomains in `nginx.nix`). A wildcard DNS record at Porkbun, `*.home.juandiazan.dev`, points to the server's **Tailscale IP**. The names resolve from anywhere, but that IP is only reachable from inside the tailnet, so **every device that uses the server needs Tailscale running, even at home**. On the LAN the traffic still goes directly between devices. The HTTPS certificate is a real one (Let's Encrypt, see `https.nix`), so browsers and apps don't show any warning.
 
 1. Run `rebuild` and check the daemon is running with `systemctl status tailscaled`.
 2. Log the server in with `sudo tailscale up`. Open the link it prints and log in with the Tailscale account.
 3. In the admin console (https://login.tailscale.com/admin/machines), open the server's `...` menu and choose **Disable key expiry**. Otherwise the server drops off the tailnet every 180 days until it's logged in again.
-4. Check MagicDNS is on in the DNS tab of the admin console (it is by default for new tailnets).
-5. Install Tailscale on every other device and log in with the same account. The desktop and laptop already have it (`modules/features/system/tailscale-client.nix`), so there it's only `rebuild` and `sudo tailscale up`. On phones, use the Tailscale app.
-6. Verify from another device with `tailscale ping nixos-server`, then open `http://nixos-server:8000`.
-7. In the Immich and Nextcloud phone apps, change the server address to `http://nixos-server:8001` and `http://nixos-server`.
+4. Get the server's Tailscale IP with `tailscale ip -4` (it starts with `100.`). It stays the same as long as the server isn't removed from the tailnet.
+5. In Porkbun, open the DNS records of `juandiazan.dev` and create an `A` record with host `*.home` and the IP from step 4 as the answer. This only has to be done once. If the server is ever removed from the tailnet and joined again, it can get a new IP, and this record has to be updated.
+6. Check MagicDNS is on in the DNS tab of the admin console (it is by default for new tailnets). The services don't need it, but it makes `nixos-server` resolve for `ssh` and `tailscale ping`.
+7. Install Tailscale on every other device and log in with the same account. The desktop and laptop already have it (`modules/features/system/tailscale-client.nix`), so there it's only `rebuild` and `sudo tailscale up`. On phones, use the Tailscale app.
+8. Verify from another device with `tailscale ping nixos-server` and `getent hosts dashboard.home.juandiazan.dev`, which should return the IP from step 4. Then open `https://dashboard.home.juandiazan.dev`.
+9. In the phone apps, use the HTTPS addresses: `https://photos.home.juandiazan.dev` in Immich, `https://cloud.home.juandiazan.dev` in Nextcloud and `https://vault.home.juandiazan.dev` in Bitwarden.
 
 Commands:
 
@@ -238,8 +340,16 @@ Commands:
 nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
 
 sudo tailscale up
+tailscale ip -4 # goes in the *.home A record at Porkbun
 
 # === verification ===
-tailscale status          # devices on the tailnet and how they're connected
+tailscale status            # devices on the tailnet and how they're connected
 tailscale ping nixos-server # from another device, "via <ip>" means a direct connection, "via DERP" means relayed
+getent hosts dashboard.home.juandiazan.dev # should return the server's Tailscale IP
 ```
+
+### Notes
+
+- If a name resolves but the page doesn't load, Tailscale is off on that device: the IP is only reachable from inside the tailnet.
+- If a name doesn't resolve on some network, its router is probably blocking public DNS answers that point to private addresses ("DNS rebinding protection"). With MagicDNS on, devices ask Tailscale's DNS server instead of the router's, which avoids it.
+- New apps don't need a DNS change: the wildcard record covers every `<app>.home.juandiazan.dev`, and the certificate covers them too.

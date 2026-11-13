@@ -1,12 +1,12 @@
 # Backup setup
 
-Nextcloud, Immich and Karakeep are backed up every night to an external USB disk with [Borg](https://www.borgbackup.org/). The config is in `modules/hosts/server/backup.nix` and the mount in `modules/hosts/server/disks.nix`. Useful commands are in [server-commands.md](server-commands.md).
+Nextcloud, Immich, Karakeep and Vaultwarden are backed up every night to an external USB disk with [Borg](https://www.borgbackup.org/). The config is in `modules/hosts/server/backup.nix` and the mount in `modules/hosts/server/disks.nix`. Useful commands are in [server-commands.md](server-commands.md).
 
 The Minecraft world isn't part of the nightly backup. It's backed up by hand into the same repository as `minecraft-<date>` archives (see [World backup](server-setup.md#world-backup)), and restored as explained in [The Minecraft world](#the-minecraft-world).
 
 | | |
 | --- | --- |
-| **What** | `/data/nextcloud`, `/data/immich`, `/data/karakeep` (without its live database), a dump of all PostgreSQL databases (`/var/backup/postgres.sql`) and a dump of Karakeep's SQLite database (`/var/backup/karakeep.sql`) |
+| **What** | `/data/nextcloud`, `/data/immich`, `/data/karakeep` (without its live database), `/data/vaultwarden` (without its live database and icon cache), a dump of all PostgreSQL databases (`/var/backup/postgres.sql`) and dumps of Karakeep's and Vaultwarden's SQLite databases (`/var/backup/karakeep.sql`, `/var/backup/vaultwarden.sql`) |
 | **Where** | `/backup/borg`, on the external disk labelled `backup` |
 | **When** | every day at 03:00, or on the next boot if the server was off at that time |
 | **How many** | 7 daily, 4 weekly and 6 monthly versions |
@@ -15,7 +15,7 @@ The Minecraft world isn't part of the nightly backup. It's backed up by hand int
 ## How it works
 
 1. Nextcloud is put in maintenance mode, so files and database don't change during the backup.
-2. All PostgreSQL databases (Nextcloud's and Immich's) are dumped to `/var/backup/postgres.sql`, and Karakeep's SQLite database to `/var/backup/karakeep.sql`. Karakeep keeps running: the dump is read in a single transaction, so it's consistent even if a bookmark is saved meanwhile. The live `/data/karakeep/db.db*` files are excluded from the archive, since a copy taken while Karakeep writes to them could be broken.
+2. All PostgreSQL databases (Nextcloud's and Immich's) are dumped to `/var/backup/postgres.sql`, Karakeep's SQLite database to `/var/backup/karakeep.sql` and Vaultwarden's to `/var/backup/vaultwarden.sql`. Both keep running: each dump is read in a single transaction, so it's consistent even if a bookmark or password is saved meanwhile. The live `/data/karakeep/db.db*` and `/data/vaultwarden/db.sqlite3*` files are excluded from the archive, since a copy taken while the app writes to them could be broken. Vaultwarden's `icon_cache` is excluded too, since the website icons are downloaded again when needed.
 3. Borg creates a new archive. Only what changed since the last one is stored (deduplication), so keeping many versions takes little space.
 4. Old archives are pruned according to the retention above.
 5. Nextcloud leaves maintenance mode. This also happens if the backup fails.
@@ -105,18 +105,18 @@ Not tested yet, only single files have been restored.
 3. Stop everything that uses the data.
 4. Extract the latest archive into `/`, which puts the files back in their original paths with their owners.
 5. Restore the PostgreSQL databases from the dump.
-6. Rebuild Karakeep's database from its dump (steps 3 to 5 of [Karakeep](#karakeep)).
+6. Rebuild Karakeep's database from its dump (steps 3 to 5 of [Karakeep](#karakeep)), and Vaultwarden's from its dump (steps 3 to 5 of [Vaultwarden](#vaultwarden)).
 7. Start the services again and take Nextcloud out of maintenance mode: the backup was taken while it was on, so the restored `config.php` has it enabled.
 8. Tell the Nextcloud clients the data changed, so they don't overwrite it with older local copies.
 9. Rebuild Karakeep's search index (see [Karakeep](#karakeep)).
 
 ```bash
-sudo systemctl stop nextcloud-cron.timer phpfpm-nextcloud nginx immich-server karakeep-web karakeep-workers
+sudo systemctl stop nextcloud-cron.timer phpfpm-nextcloud nginx immich-server karakeep-web karakeep-workers vaultwarden
 sudo borg-job-data list --glob-archives 'nixos-server-data-*' --last 1 # latest archive name, skipping minecraft-* ones
 cd / && sudo borg-job-data extract ::<archive>
 sudo cat /var/backup/postgres.sql | sudo -u postgres psql postgres
-# karakeep database, see the Karakeep section
-sudo systemctl start phpfpm-nextcloud nginx immich-server nextcloud-cron.timer karakeep-workers karakeep-web
+# karakeep and vaultwarden databases, see their sections
+sudo systemctl start phpfpm-nextcloud nginx immich-server nextcloud-cron.timer karakeep-workers karakeep-web vaultwarden
 sudo nextcloud-occ maintenance:mode --off
 sudo nextcloud-occ maintenance:data-fingerprint
 ```
@@ -148,6 +148,33 @@ sudo systemctl start karakeep-workers karakeep-web
 ```
 
 Extracting `data/karakeep` on top of the existing folder brings back deleted assets but leaves behind any created after the backup. They're harmless (no bookmark points to them), but to get an exact copy, move the folder's *contents* aside first. Don't move `/data/karakeep` itself: it's bind-mounted onto `/var/lib/karakeep`, and the mount would follow the moved folder, so Karakeep would keep using the old files.
+
+### Vaultwarden
+
+Not tested yet.
+
+The archive has Vaultwarden's attachments, Sends and keys (`rsa_key.pem`) in `data/vaultwarden`, but not its live database (`db.sqlite3`) or its icon cache, which are excluded. The database is rebuilt from the dump in `var/backup/vaultwarden.sql`, and the icons are downloaded again when needed.
+
+1. Pick the archive with `sudo borg-job-data list --glob-archives 'nixos-server-data-*'`.
+2. Stop Vaultwarden with `sudo systemctl stop vaultwarden`.
+3. Extract `data/vaultwarden` and `var/backup/vaultwarden.sql` into `/`.
+4. Delete the current database files (`db.sqlite3`, `db.sqlite3-wal`, `db.sqlite3-shm`). The dump recreates the database from scratch, and loading it on top of an existing one fails. Leftover `-wal`/`-shm` files from the old database would also corrupt the new one.
+5. Load the dump into a new `db.sqlite3` as the `vaultwarden` user, so the files belong to it, and make sure everything in `/data/vaultwarden` belongs to `vaultwarden`. `sqlite3` isn't installed on the server, so get it with `nix shell` first.
+6. Start Vaultwarden, log in from the web vault and check the passwords are there. The apps may ask to log in again; if they keep failing to sync, log out and back in.
+
+```bash
+sudo borg-job-data list --glob-archives 'nixos-server-data-*'
+sudo systemctl stop vaultwarden
+cd / && sudo borg-job-data extract ::<archive> data/vaultwarden var/backup/vaultwarden.sql
+sudo rm -f /data/vaultwarden/db.sqlite3 /data/vaultwarden/db.sqlite3-wal /data/vaultwarden/db.sqlite3-shm
+nix shell nixpkgs#sqlite
+sudo cat /var/backup/vaultwarden.sql | sudo -u vaultwarden "$(command -v sqlite3)" /data/vaultwarden/db.sqlite3
+sudo chown -R vaultwarden:vaultwarden /data/vaultwarden
+exit # leave the nix shell
+sudo systemctl start vaultwarden
+```
+
+Like with Karakeep, don't move `/data/vaultwarden` itself aside: it's bind-mounted onto `/var/lib/vaultwarden`, and the mount would follow the moved folder.
 
 ### The Minecraft world
 
