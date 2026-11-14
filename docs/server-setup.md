@@ -278,9 +278,42 @@ sudo systemctl restart homepage-dashboard
 curl -H "Authorization: <token>" "http://localhost:8002/etapi/metrics?format=json"
 ```
 
+### Tailscale
+
+For Tailscale, the API key is an access token created from the Tailscale admin console, and the widget shows the server's device on the tailnet (address, last seen, key expiry and whether there's an update). Tailscale access tokens can't be limited to some permissions: the token has full access to the tailnet's API, so it should be treated like a password. They also **expire after at most 90 days**, so this has to be repeated every time the widget shows an error because the key expired.
+
+1. Go to https://login.tailscale.com/admin/settings/keys and create a token from **Generate access token**. Give it a description like `homepage` and the longest expiry (90 days). The token is only shown once.
+2. Get the server's device ID with `tailscale status --json | nix run nixpkgs#jq -- -r .Self.ID` on the server. It ends with `CNTRL`. It's also shown as `ID` in the server's page of the admin console (https://login.tailscale.com/admin/machines).
+3. Write the device ID in `deviceid` in the Tailscale entry of `homepage.nix`. It isn't a secret, so it goes in the config instead of the secrets file.
+4. Edit the secrets file with `sudoedit /etc/homepage-secrets`.
+5. Add a new line with the token obtained in step 1 in the following format: `HOMEPAGE_VAR_TAILSCALE_KEY=<token>`.
+6. Run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secrets file when it starts.
+7. Verify the token with the `curl` command below, it should return JSON with the server's details. Also verify Homepage shows the address, last seen and expiry on the Tailscale entry instead of an error. A `401` means the token is wrong or expired; a `404` means the device ID is wrong.
+8. Check the expiry shows **Never**. If it shows a time, key expiry was enabled again on the server (see step 3 of [Tailscale](#tailscale-1)).
+
+Commands:
+
+```bash
+# === device id ===
+tailscale status --json | nix run nixpkgs#jq -- -r .Self.ID
+# write it in deviceid in homepage.nix
+
+# === secrets ===
+sudoedit /etc/homepage-secrets
+# add HOMEPAGE_VAR_TAILSCALE_KEY=<token>
+
+nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+sudo systemctl restart homepage-dashboard
+
+# === verification ===
+curl -H "Authorization: Bearer <token>" "https://api.tailscale.com/api/v2/device/<device-id>"
+```
+
+When the token expires, only steps 1, 4 (replacing the old `HOMEPAGE_VAR_TAILSCALE_KEY` line), 6 and 7 have to be repeated.
+
 ## HTTPS
 
-Every app is served over HTTPS with a single wildcard certificate for `*.home.juandiazan.dev`, issued by Let's Encrypt. The config is in `https.nix`. Since the server isn't reachable from the internet (see [Tailscale](#tailscale)), Let's Encrypt can't check it over HTTP. It uses the **DNS challenge** instead: the server proves it owns the domain by creating a temporary `TXT` record at Porkbun through its API, so it needs Porkbun API keys stored in `/etc/acme-porkbun`. To set it up the following steps should be followed:
+Every app is served over HTTPS with a single wildcard certificate for `*.home.juandiazan.dev`, issued by Let's Encrypt. The config is in `https.nix`. Since the server isn't reachable from the internet (see [Tailscale](#tailscale-1)), Let's Encrypt can't check it over HTTP. It uses the **DNS challenge** instead: the server proves it owns the domain by creating a temporary `TXT` record at Porkbun through its API, so it needs Porkbun API keys stored in `/etc/acme-porkbun`. To set it up the following steps should be followed:
 
 1. In Porkbun, create an API key from Account → API Access (https://porkbun.com/account/api). It gives two values, the API key (`pk1_...`) and the secret key (`sk1_...`). The secret is only shown once.
 2. Enable API access for the domain: in Domain Management, open `juandiazan.dev`'s details and turn on **API Access**. Without this the keys work, but the server can't edit this domain's records.

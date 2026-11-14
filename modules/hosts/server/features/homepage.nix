@@ -107,6 +107,18 @@
               };
             }
             {
+              "Tailscale" = {
+                icon = "tailscale.png";
+                href = "https://login.tailscale.com/admin/machines";
+                widget = {
+                  type = "tailscale";
+                  deviceid = "nP83UQ8qHC21CNTRL";
+                  key = "{{HOMEPAGE_VAR_TAILSCALE_KEY}}";
+                  fields = ["address" "last_seen" "expires" "update_available"];
+                };
+              };
+            }
+            {
               "Scrutiny" = {
                 icon = "scrutiny.png";
                 href = "https://disks.${config.serverDomain}";
