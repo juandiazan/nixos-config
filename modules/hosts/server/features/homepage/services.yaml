@@ -39,6 +39,7 @@
           type: karakeep
           url: http://localhost:{{HOMEPAGE_VAR_KARAKEEP_PORT}}
           key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
+          fields: [bookmarks, favorites, lists, tags]
 
     - Vaultwarden:
         icon: vaultwarden.png
@@ -55,12 +56,13 @@
           type: tailscale
           deviceid: nP83UQ8qHC21CNTRL
           key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"
-          fields: [address, last_seen, expires, update_available]
+          fields: [name, last_seen, expires, update_available]
 
     - Scrutiny:
         icon: scrutiny.png
         href: https://disks.{{HOMEPAGE_VAR_DOMAIN}}
         description: Disk health.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_SCRUTINY_PORT}}
         widget:
           type: scrutiny
           url: http://localhost:{{HOMEPAGE_VAR_SCRUTINY_PORT}}
