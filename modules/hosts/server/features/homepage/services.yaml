@@ -1,0 +1,74 @@
+- Utility:
+    - Nextcloud:
+        icon: nextcloud.png
+        href: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Self-hosted cloud.
+        siteMonitor: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}/status.php
+        widget:
+          type: nextcloud
+          url: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
+          key: "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}"
+
+    - Immich:
+        icon: immich.png
+        href: https://photos.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Photo and video storage.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_IMMICH_PORT}}
+        widget:
+          type: immich
+          url: http://localhost:{{HOMEPAGE_VAR_IMMICH_PORT}}
+          key: "{{HOMEPAGE_VAR_IMMICH_KEY}}"
+          version: 2
+
+    - Trilium:
+        icon: trilium.png
+        href: https://notes.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Notes storage with markdown, tables and other features.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_TRILIUM_PORT}}
+        widget:
+          type: trilium
+          url: http://localhost:{{HOMEPAGE_VAR_TRILIUM_PORT}}
+          key: "{{HOMEPAGE_VAR_TRILIUM_KEY}}"
+
+    - Karakeep:
+        icon: karakeep.png
+        href: https://bookmarks.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Bookmarks with tags and semantic search.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_KARAKEEP_PORT}}
+        widget:
+          type: karakeep
+          url: http://localhost:{{HOMEPAGE_VAR_KARAKEEP_PORT}}
+          key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
+
+    - Vaultwarden:
+        icon: vaultwarden.png
+        href: https://vault.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Passwords, MFA and other security storage.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_VAULTWARDEN_PORT}}/alive
+
+- Infrastructure:
+    - Tailscale:
+        icon: tailscale.png
+        href: https://login.tailscale.com/admin/machines
+        description: VPN for remote access.
+        widget:
+          type: tailscale
+          deviceid: nP83UQ8qHC21CNTRL
+          key: "{{HOMEPAGE_VAR_TAILSCALE_KEY}}"
+          fields: [address, last_seen, expires, update_available]
+
+    - Scrutiny:
+        icon: scrutiny.png
+        href: https://disks.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Disk health.
+        widget:
+          type: scrutiny
+          url: http://localhost:{{HOMEPAGE_VAR_SCRUTINY_PORT}}
+
+- Gaming:
+    - Minecraft:
+        icon: minecraft.png
+        description: Minecraft server.
+        widget:
+          type: minecraft
+          url: udp://localhost:{{HOMEPAGE_VAR_MINECRAFT_PORT}}

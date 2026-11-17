@@ -1,0 +1,22 @@
+- resources:
+    label: System
+    expanded: true
+    cpu: true
+    memory: true
+    cputemp: true
+    uptime: true
+
+- resources:
+    label: System disk
+    expanded: true
+    disk: /
+
+- resources:
+    label: Data disk
+    expanded: true
+    disk: /data
+
+- resources:
+    label: Backup disk
+    expanded: true
+    disk: /backup
