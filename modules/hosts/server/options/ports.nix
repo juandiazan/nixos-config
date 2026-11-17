@@ -19,6 +19,7 @@
         karakeep = 8003;
         vaultwarden = 8004;
         scrutiny = 7000;
+        minecraft = 25565;
       };
 
       assertions = [

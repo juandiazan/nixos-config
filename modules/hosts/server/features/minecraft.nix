@@ -41,7 +41,7 @@
         declarative = true;
         serverProperties = {
           motd = "cca y sus amigos";
-          server-port = 25565;
+          server-port = config.ports.minecraft;
           level-name = "server-world";
           level-type = "minecraft:normal";
           gamemode = "survival";
