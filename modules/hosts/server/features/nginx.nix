@@ -14,6 +14,7 @@
       bookmarks = ports.karakeep;
       disks = ports.scrutiny;
       vault = ports.vaultwarden;
+      music = ports.navidrome;
     };
   in {
     services.nginx = {

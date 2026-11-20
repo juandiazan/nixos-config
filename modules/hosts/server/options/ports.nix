@@ -18,6 +18,7 @@
         trilium = 8002;
         karakeep = 8003;
         vaultwarden = 8004;
+        navidrome = 8005;
         scrutiny = 7000;
         minecraft = 25565;
       };

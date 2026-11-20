@@ -41,6 +41,18 @@
           key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
           fields: [bookmarks, favorites, lists, tags]
 
+    - Navidrome:
+        icon: navidrome.png
+        href: https://music.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Music streaming and library.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
+        widget:
+          type: navidrome
+          url: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
+          user: "{{HOMEPAGE_VAR_NAVIDROME_USER}}"
+          token: "{{HOMEPAGE_VAR_NAVIDROME_TOKEN}}"
+          salt: "{{HOMEPAGE_VAR_NAVIDROME_SALT}}"
+
     - Vaultwarden:
         icon: vaultwarden.png
         href: https://vault.{{HOMEPAGE_VAR_DOMAIN}}

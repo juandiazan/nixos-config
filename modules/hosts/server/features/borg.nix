@@ -15,11 +15,15 @@
         "/data/karakeep"
         "/data/vaultwarden"
         "/var/backup" # database dump, see ExecStartPre
+        "/data/navidrome"
+        "/data/music"
       ];
       exclude = [
         "/data/karakeep/db.db*"
         "/data/vaultwarden/db.sqlite3*"
         "/data/vaultwarden/icon_cache"
+        "/data/navidrome/navidrome.db*"
+        "/data/navidrome/cache"
       ];
       repo = "/backup/borg";
       encryption = {
@@ -63,6 +67,11 @@
           ${pkgs.util-linux}/bin/runuser -u vaultwarden -- \
             ${pkgs.sqlite}/bin/sqlite3 /data/vaultwarden/db.sqlite3 .dump > /var/backup/vaultwarden.sql
           chmod 600 /var/backup/vaultwarden.sql
+
+          # navidrome
+          ${pkgs.util-linux}/bin/runuser -u navidrome -- \
+            ${pkgs.sqlite}/bin/sqlite3 /data/navidrome/navidrome.db .dump > /var/backup/navidrome.sql
+          chmod 600 /var/backup/navidrome.sql
         ''}"
       ];
       ExecStopPost = ["+${occ} maintenance:mode --off"];
