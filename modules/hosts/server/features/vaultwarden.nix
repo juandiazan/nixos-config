@@ -3,7 +3,7 @@
     services.vaultwarden = {
       enable = true;
       domain = "vault.${config.serverDomain}";
-      environmentFile = "/etc/vaultwarden-secrets";
+      environmentFile = config.age.secrets.vaultwarden-secrets.path;
       config = {
         ROCKET_ADDRESS = "127.0.0.1";
         ROCKET_PORT = config.ports.vaultwarden;

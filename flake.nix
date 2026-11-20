@@ -33,6 +33,11 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    secrets = {
+      url = "git+ssh://git@github.com/juandiazan/nixos-secrets";
+      flake = false;
+    };
   };
 
   outputs = inputs: let

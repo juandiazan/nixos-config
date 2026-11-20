@@ -28,7 +28,7 @@
       repo = "/backup/borg";
       encryption = {
         mode = "repokey-blake2";
-        passCommand = "cat /etc/borg-passphrase";
+        passCommand = "cat ${config.age.secrets.borg-passphrase.path}";
       };
       compression = "auto,zstd";
 

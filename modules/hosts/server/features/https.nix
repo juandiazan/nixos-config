@@ -6,7 +6,7 @@
       certs.${config.serverDomain} = {
         domain = "*.${config.serverDomain}";
         dnsProvider = "porkbun";
-        environmentFile = "/etc/acme-porkbun";
+        environmentFile = config.age.secrets.acme-porkbun.path;
         dnsResolver = "1.1.1.1:53";
         group = config.services.nginx.group;
       };

@@ -17,7 +17,7 @@
       runtimeEnv = {
         MC_DIR = config.services.minecraft-server.dataDir;
         MC_STDIN = config.systemd.sockets.minecraft-server.socketConfig.ListenFIFO;
-        MC_WEBHOOK_URL_FILE = "/etc/discord-mc-webhook-url";
+        MC_WEBHOOK_URL_FILE = config.age.secrets.discord-mc-webhook-url.path;
         BORG_REPO = config.services.borgbackup.jobs.data.repo;
         BORG_PASSCOMMAND = config.services.borgbackup.jobs.data.encryption.passCommand;
       };
@@ -27,8 +27,8 @@
     services = {
       duckdns = {
         enable = true;
-        domainsFile = "/etc/duckdns-domains";
-        tokenFile = "/etc/duckdns-token";
+        domainsFile = config.age.secrets.duckdns-domains.path;
+        tokenFile = config.age.secrets.duckdns-token.path;
       };
 
       minecraft-server = {

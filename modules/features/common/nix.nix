@@ -18,6 +18,7 @@
       nrs = "nixos-rebuild switch --sudo -L --flake ~/nixos-config"; # with sudo flag only activation runs as sudo
       nfu = "nix flake update --flake ~/nixos-config";
       nrsr = "sudo nixos-rebuild switch --rollback";
+      nfl = "nix flake lock";
     };
   };
 }

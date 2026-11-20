@@ -10,7 +10,7 @@
       enable = true;
       listenPort = ports.homepage;
       allowedHosts = "dashboard.${config.serverDomain}";
-      environmentFiles = ["/etc/homepage-secrets"];
+      environmentFiles = [config.age.secrets.homepage-secrets.path];
     };
 
     environment.etc = {

@@ -120,8 +120,25 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "obsidian-extensions": "obsidian-extensions",
+        "secrets": "secrets",
         "waybar": "waybar",
         "zen-browser": "zen-browser"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795203062,
+        "narHash": "sha256-dPhFnF8USw58aN9YTgbyaGSnIOCse+e3rSpyH3p7MmI=",
+        "ref": "refs/heads/main",
+        "rev": "20842b17a61fc49f50cd97abe0dc6415f0913e7d",
+        "revCount": 2,
+        "type": "git",
+        "url": "ssh://git@github.com/juandiazan/nixos-secrets"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/juandiazan/nixos-secrets"
       }
     },
     "treefmt-nix": {
