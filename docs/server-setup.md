@@ -1,35 +1,29 @@
 # Setup
 
+The secrets used below (tokens, API keys, passphrases) are encrypted with agenix and stored in the private `nixos-secrets` repo. How to set it up, add, edit and read secrets is explained in [secrets.md](secrets.md).
+
 ## Minecraft
 
 ### Server
 
-The server needs a DuckDNS token to have a Dynamic DNS, to set the token up the following steps should be followed:
+The server needs a DuckDNS token to have a Dynamic DNS. The token and the subdomain are stored in the `duckdns-token` and `duckdns-domains` secrets (see [secrets.md](secrets.md)). To set them up the following steps should be followed:
 
 1. Go to duckdns.org, create an account and get a token.
-2. Create and edit the file where the secret will be stored with `sudoedit /etc/duckdns-token`.
-3. Enter the token obtained in step 1.
-4. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/duckdns-token`.
-5. Create and edit the file that will store the subdomain name with `sudoedit /etc/duckdns-domains`.
-6. Enter the name that will be in the domain (just the name, the entire URL will look like `<my-subdomain>.duckdns.org`)
-7. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/duckdns-domains`
-8. Run `rebuild`.
-9. Verify with `journalctl -u duckdns`. It should say `successful` or `Your IP was updated`. Also verify with `nslookup <created-domain>`.
+2. Save the token obtained in step 1 in the `duckdns-token` secret (see [Editing a secret](secrets.md#editing-a-secret)).
+3. Save the name that will be in the domain in the `duckdns-domains` secret (just the name, the entire URL will look like `<my-subdomain>.duckdns.org`).
+4. Push `nixos-secrets`, update the `secrets` input and run `rebuild` on the server.
+5. Verify with `journalctl -u duckdns`. It should say `successful` or `Your IP was updated`. Also verify with `nslookup <created-domain>`.
 
 Commands:
 
 ```bash
-# === token ===
-sudoedit /etc/duckdns-token
-# paste the duckdns token
-sudo chmod 600 /etc/duckdns-token
+# === secrets (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e duckdns-token.age # paste the duckdns token
+agenix -e duckdns-domains.age # write the subdomain name
+# push, then nix flake update secrets in nixos-config
 
-# === subdomain ===
-sudoedit /etc/duckdns-domains
-# write the subdomain name
-sudo chmod 600 /etc/duckdns-domains
-
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 # === verification ===
 journalctl -u duckdns
@@ -38,22 +32,22 @@ nslookup <created-url>
 ```
 ### Webhooks
 
+The webhook URL is stored in the `discord-mc-webhook-url` secret (see [secrets.md](secrets.md)). `mcmanage` reads it every time it sends a notification.
+
 1. Go to a discord channel, and get a webhook URL.
-2. Create and edit the file where the URL will be stored with `sudoedit /etc/discord-mc-webhook-url`.
-3. Enter the URL obtained in step 1.
-4. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/discord-mc-webhook-url`.
-5. Run `rebuild` and after that run `systemctl restart minecraft-server`.
-6. Verify with `systemctl show minecraft-server -p ExecStartPost -p ExecStopPost` and `journalctl -u minecraft-server`
+2. Save the URL obtained in step 1 in the `discord-mc-webhook-url` secret (see [Editing a secret](secrets.md#editing-a-secret)).
+3. Push `nixos-secrets`, update the `secrets` input, run `rebuild` on the server and after that run `systemctl restart minecraft-server`.
+4. Verify with `systemctl show minecraft-server -p ExecStartPost -p ExecStopPost` and `journalctl -u minecraft-server`. The Discord channel should get the "server up" message.
 
 Commands:
 
 ```bash
-# === url ===
-sudoedit /etc/discord-mc-webhook-url
-# paste the discord webhook url
-sudo chmod 600 /etc/discord-mc-webhook-url
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e discord-mc-webhook-url.age # paste the discord webhook url
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 # === verification ===
 systemctl show minecraft-server -p ExecStartPost -p ExecStopPost
@@ -73,7 +67,7 @@ Commands:
 mcmanage backup
 
 # === verification ===
-sudo BORG_PASSCOMMAND='cat /etc/borg-passphrase' borg list /backup/borg
+sudo BORG_PASSCOMMAND='cat /run/agenix/borg-passphrase' borg list /backup/borg
 ```
 
 ## Nextcloud 
@@ -93,7 +87,7 @@ Commands:
 ```bash
 findmnt /data
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 # === verification ===
 systemctl status nextcloud-setup phpfpm-nextcloud nginx
@@ -125,21 +119,20 @@ sudo nextcloud-occ files:scan juani
 
 ## Vaultwarden
 
-Vaultwarden is used as a self-hosted password manager. It's a lightweight server that works with the official Bitwarden apps and browser extensions. It's served at `https://vault.home.juandiazan.dev` and its data is stored in `/data/vaultwarden`, which is bind-mounted onto `/var/lib/vaultwarden`. The settings are in `vaultwarden.nix`, and the only secret, the admin page token, is in `/etc/vaultwarden-secrets`. To set it up the following steps should be followed:
+Vaultwarden is used as a self-hosted password manager. It's a lightweight server that works with the official Bitwarden apps and browser extensions. It's served at `https://vault.home.juandiazan.dev` and its data is stored in `/data/vaultwarden`, which is bind-mounted onto `/var/lib/vaultwarden`. The settings are in `vaultwarden.nix`, and the only secret, the admin page token, is in the `vaultwarden-secrets` secret (see [secrets.md](secrets.md)). To set it up the following steps should be followed:
 
 1. Generate a random admin token with `head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo` and save it somewhere safe outside the vault (it's needed to open the admin page, and the vault could be the thing that's broken).
-2. Hash it with `nix shell nixpkgs#vaultwarden -c vaultwarden hash`. It asks for the token twice and prints a line like `ADMIN_TOKEN='$argon2id$...'`. Only the hash is stored on the server, so someone who reads the file still can't log into the admin page.
-3. Create and edit the file where the secret will be stored with `sudoedit /etc/vaultwarden-secrets`.
-4. Paste the whole line printed in step 2, single quotes included. The `$` characters must stay as they are: systemd reads this file without expanding variables, so they don't have to be escaped as `$$` like some guides say (that's for Docker Compose).
-5. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/vaultwarden-secrets`.
-6. Make sure the data disk is mounted with `findmnt /data`. Vaultwarden won't start without it.
-7. Run `rebuild`. The secrets file must exist before this, otherwise Vaultwarden fails to start with `Failed to load environment files`.
-8. Verify with `systemctl status vaultwarden` and `findmnt /var/lib/vaultwarden`, it should show `/data/vaultwarden` as the source. Also verify with `curl http://127.0.0.1:8004/alive`, it should return the current date.
-9. Open `https://vault.home.juandiazan.dev` and create an account with an email and a strong master password. **The master password can't be recovered or reset**: it's the key the vault is encrypted with. Save it outside the server (paper).
-10. Disable new sign-ups by setting `SIGNUPS_ALLOWED = false` in `vaultwarden.nix` and running `rebuild` (it restarts Vaultwarden by itself). Until this is done, anyone who can reach the page can create an account.
-11. Enable two-step login from Settings → Security → Two-step login (an authenticator app or a security key).
-12. Open `https://vault.home.juandiazan.dev/admin`, log in with the token from step 1 (the plain one, not the hash) and check that everything is green in Diagnostics. **Don't save settings from the admin page** (see notes).
-13. Install the Bitwarden app on every device (browser extension, desktop and phone). On the login screen choose **self-hosted** as the server and enter `https://vault.home.juandiazan.dev`.
+2. Hash it with `nix shell nixpkgs#vaultwarden -c vaultwarden hash`. It asks for the token twice and prints a line like `ADMIN_TOKEN='$argon2id$...'`. Only the hash is stored on the server, so someone who reads the secret still can't log into the admin page.
+3. Save the whole line printed in step 2, single quotes included, in the `vaultwarden-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)). The `$` characters must stay as they are: systemd reads this file without expanding variables, so they don't have to be escaped as `$$` like some guides say (that's for Docker Compose).
+4. Push `nixos-secrets` and update the `secrets` input.
+5. Make sure the data disk is mounted with `findmnt /data`. Vaultwarden won't start without it.
+6. Run `rebuild`. The secret must exist before this, otherwise Vaultwarden can't load its environment file and doesn't start.
+7. Verify with `systemctl status vaultwarden` and `findmnt /var/lib/vaultwarden`, it should show `/data/vaultwarden` as the source. Also verify with `curl http://127.0.0.1:8004/alive`, it should return the current date.
+8. Open `https://vault.home.juandiazan.dev` and create an account with an email and a strong master password. **The master password can't be recovered or reset**: it's the key the vault is encrypted with. Save it outside the server (paper).
+9. Disable new sign-ups by setting `SIGNUPS_ALLOWED = false` in `vaultwarden.nix` and running `rebuild` (it restarts Vaultwarden by itself). Until this is done, anyone who can reach the page can create an account.
+10. Enable two-step login from Settings → Security → Two-step login (an authenticator app or a security key).
+11. Open `https://vault.home.juandiazan.dev/admin`, log in with the token from step 1 (the plain one, not the hash) and check that everything is green in Diagnostics. **Don't save settings from the admin page** (see notes).
+12. Install the Bitwarden app on every device (browser extension, desktop and phone). On the login screen choose **self-hosted** as the server and enter `https://vault.home.juandiazan.dev`.
 
 Commands:
 
@@ -149,14 +142,14 @@ head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo
 # save it somewhere safe outside the vault
 nix shell nixpkgs#vaultwarden -c vaultwarden hash
 
-# === secrets ===
-sudoedit /etc/vaultwarden-secrets
-# paste ADMIN_TOKEN='<hash>'
-sudo chmod 600 /etc/vaultwarden-secrets
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e vaultwarden-secrets.age # paste ADMIN_TOKEN='<hash>'
+# push, then nix flake update secrets in nixos-config
 
 findmnt /data
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 # === verification ===
 systemctl status vaultwarden
@@ -165,12 +158,12 @@ curl http://127.0.0.1:8004/alive
 
 # === after creating the account ===
 # set SIGNUPS_ALLOWED = false in vaultwarden.nix
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 ```
 
 ### Notes
 
-- Vaultwarden only reads `/etc/vaultwarden-secrets` when it starts, and a rebuild doesn't restart it if only that file changed. After editing it, run `sudo systemctl restart vaultwarden`. Changes in `vaultwarden.nix` are applied by `rebuild`.
+- Vaultwarden only reads its secret when it starts, and a rebuild doesn't restart it if only the secret changed. After editing it, run `sudo systemctl restart vaultwarden`. Changes in `vaultwarden.nix` are applied by `rebuild`.
 - Settings saved from the admin page are written to `/data/vaultwarden/config.json` and **override** the ones in `vaultwarden.nix`. Only use the admin page to look at things (users, diagnostics). If a setting from `vaultwarden.nix` seems to be ignored, check if that file exists.
 - The apps keep an offline copy of the vault, so passwords can still be read without Tailscale, but they only sync (and new items only reach the server) when Tailscale is running.
 - `/data/vaultwarden/rsa_key.pem` signs the login sessions. If it's lost, every device is logged out and has to log in again.
@@ -178,26 +171,25 @@ nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
 
 ## Homepage 
 
-Homepage needs some API Keys to show certain service information. The keys should be stored inside /etc/homepage-secrets
+Homepage needs some API Keys to show certain service information. The keys are stored in the `homepage-secrets` secret, one `HOMEPAGE_VAR_<NAME>=<value>` per line (see [secrets.md](secrets.md)). Each subsection below adds a line to it with `agenix -e homepage-secrets.age` from `~/nixos-secrets`, then the secret is pushed, the `secrets` input updated and the server rebuilt (see [Editing a secret](secrets.md#editing-a-secret)). Homepage only reads the secret when it starts, and a rebuild doesn't restart it, so after every change run `sudo systemctl restart homepage-dashboard`.
 
 ### Karakeep
 
 For Karakeep, it is possible to create an API Key from user settings inside the app.
 
 1. Go to where Karakeep is hosted, create an account and get an API key.
-2. Create and edit the file where the secret will be stored with `sudoedit /etc/homepage-secrets`.
-3. Enter the API key obtained in step 1 with the following format: `HOMEPAGE_VAR_KARAKEEP_KEY=<api-key>`.
-4. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/homepage-secrets`.
+2. Add the API key obtained in step 1 to the `homepage-secrets` secret with the following format: `HOMEPAGE_VAR_KARAKEEP_KEY=<api-key>`.
+3. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`.
 
 Commands:
 
 ```bash
-# === secrets ===
-sudoedit /etc/homepage-secrets
-# write HOMEPAGE_VAR_KARAKEEP_KEY=<api-key>
-sudo chmod 600 /etc/homepage-secrets
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_KARAKEEP_KEY=<api-key>
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 ```
 
@@ -207,9 +199,9 @@ For Nextcloud, the token isn't created in the app: a random one is generated and
 
 1. Generate a random token with `head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo` and copy it.
 2. Tell Nextcloud to accept it with `sudo nextcloud-occ config:app:set serverinfo token --value <token>`. It's stored in Nextcloud's database, so it's included in the nightly backup.
-3. Edit the secrets file with `sudoedit /etc/homepage-secrets`.
+3. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
 4. Add a new line with the same token in the following format: `HOMEPAGE_VAR_NEXTCLOUD_KEY=<token>`.
-5. Run `rebuild` and then `sudo systemctl restart homepage-dashboard`. Homepage only reads the secrets file when it starts, and a rebuild doesn't restart it: it picks up the new widget config live, but keeps the old secrets.
+5. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`. Homepage only reads the secret when it starts, and a rebuild doesn't restart it: it picks up the new widget config live, but keeps the old secrets.
 6. Verify the token with the `curl` command below, it should return JSON with the server info. Also verify Homepage shows numbers on the Nextcloud entry instead of an error. If it fails, check the serverinfo app is enabled with `sudo nextcloud-occ app:list`.
 
 Commands:
@@ -219,11 +211,12 @@ Commands:
 head -c 32 /dev/urandom | base64 | tr -d '\n/+='; echo
 sudo nextcloud-occ config:app:set serverinfo token --value <token>
 
-# === secrets ===
-sudoedit /etc/homepage-secrets
-# add HOMEPAGE_VAR_NEXTCLOUD_KEY=<token>
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_NEXTCLOUD_KEY=<token>
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 
 # === verification ===
@@ -236,19 +229,20 @@ sudo nextcloud-occ app:list | grep serverinfo
 For Immich, the API key is created from the account settings inside the app. The widget reads the server statistics, which only admins can see, so the key must be created from the admin account. Immich lets each key have only some permissions, so it's given only the one the widget needs: a leaked key can read the numbers but not the photos.
 
 1. Go to where Immich is hosted, log in with the admin account and create an API key from Account Settings → API Keys, with only the server statistics permission (`server.statistics`). If the widget later fails with only that one, also allow the server version/info permission.
-2. Edit the secrets file with `sudoedit /etc/homepage-secrets`.
+2. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
 3. Add a new line with the API key obtained in step 1 in the following format: `HOMEPAGE_VAR_IMMICH_KEY=<api-key>`.
-4. Run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secrets file when it starts.
+4. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secret when it starts.
 5. Verify the key with the `curl` command below, it should return JSON with the photo and video counts. Also verify Homepage shows numbers on the Immich entry instead of an error. A `401` means the key is wrong or wasn't created from the admin account; a `403` means it's missing a permission.
 
 Commands:
 
 ```bash
-# === secrets ===
-sudoedit /etc/homepage-secrets
-# add HOMEPAGE_VAR_IMMICH_KEY=<api-key>
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_IMMICH_KEY=<api-key>
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 
 # === verification ===
@@ -259,23 +253,60 @@ curl -H "x-api-key: <api-key>" "http://localhost:8001/api/server/statistics"
 For Trilium, the API key is an ETAPI token created from the options inside the app. ETAPI tokens can't be limited to some permissions: the token has full access to the notes (read, edit and delete), so it should be treated like a password.
 
 1. Go to where Trilium is hosted, log in and create a token from Options → ETAPI → Create new ETAPI token. Give it a name like `homepage`.
-2. Edit the secrets file with `sudoedit /etc/homepage-secrets`.
+2. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
 3. Add a new line with the token obtained in step 1 in the following format: `HOMEPAGE_VAR_TRILIUM_KEY=<token>`.
-4. Run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secrets file when it starts.
+4. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secret when it starts.
 5. Verify the token with the `curl` command below, it should return JSON with the version and note counts. Also verify Homepage shows the version, number of notes and database size on the Trilium entry instead of an error. A `401` means the token is wrong.
 
 Commands:
 
 ```bash
-# === secrets ===
-sudoedit /etc/homepage-secrets
-# add HOMEPAGE_VAR_TRILIUM_KEY=<token>
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_TRILIUM_KEY=<token>
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 
 # === verification ===
 curl -H "Authorization: <token>" "http://localhost:8002/etapi/metrics?format=json"
+```
+
+### Navidrome
+
+For Navidrome, the widget logs in through the Subsonic API with three values: a username, a random salt and a token, which is `md5(password + salt)`. Navidrome doesn't create API keys, so the token comes from that user's password, and it has the same access as the user. A dedicated non-admin user (e.g. `homepage`, created from Settings → Users) keeps the admin's password out of it. If the user's password changes, the token has to be generated again.
+
+1. Choose the Navidrome user the widget will use, and create it if it's a new one.
+2. Generate a random salt and the token with the commands below. `read -rs` asks for the password without showing it and without saving it in the shell history.
+3. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
+4. Add three new lines in the following format: `HOMEPAGE_VAR_NAVIDROME_USER=<user>`, `HOMEPAGE_VAR_NAVIDROME_TOKEN=<token>` and `HOMEPAGE_VAR_NAVIDROME_SALT=<salt>`.
+5. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secret when it starts.
+6. Verify the values with the `curl` command below on the server, it should return JSON with `"status":"ok"`. Also verify Homepage shows the Navidrome entry without an error. A `"code":40` error means the user, token or salt is wrong.
+
+Commands:
+
+```bash
+# === salt and token ===
+SALT=$(head -c 16 /dev/urandom | base64 | tr -d '\n/+=')
+read -rs PASS # type the user's password
+printf '%s%s' "$PASS" "$SALT" | md5sum | cut -d' ' -f1 # token
+echo "$SALT" # salt
+unset PASS
+
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age
+# add HOMEPAGE_VAR_NAVIDROME_USER=<user>
+# add HOMEPAGE_VAR_NAVIDROME_TOKEN=<token>
+# add HOMEPAGE_VAR_NAVIDROME_SALT=<salt>
+# push, then nix flake update secrets in nixos-config
+
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
+sudo systemctl restart homepage-dashboard
+
+# === verification ===
+curl "http://localhost:8005/rest/ping?u=<user>&t=<token>&s=<salt>&v=1.16.1&c=homepage&f=json"
 ```
 
 ### Tailscale
@@ -285,9 +316,9 @@ For Tailscale, the API key is an access token created from the Tailscale admin c
 1. Go to https://login.tailscale.com/admin/settings/keys and create a token from **Generate access token**. Give it a description like `homepage` and the longest expiry (90 days). The token is only shown once.
 2. Get the server's device ID with `tailscale status --json | nix run nixpkgs#jq -- -r .Self.ID` on the server. It ends with `CNTRL`. It's also shown as `ID` in the server's page of the admin console (https://login.tailscale.com/admin/machines).
 3. Write the device ID in `deviceid` in the Tailscale entry of `homepage.nix`. It isn't a secret, so it goes in the config instead of the secrets file.
-4. Edit the secrets file with `sudoedit /etc/homepage-secrets`.
+4. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
 5. Add a new line with the token obtained in step 1 in the following format: `HOMEPAGE_VAR_TAILSCALE_KEY=<token>`.
-6. Run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secrets file when it starts.
+6. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secret when it starts.
 7. Verify the token with the `curl` command below, it should return JSON with the server's details. Also verify Homepage shows the address, last seen and expiry on the Tailscale entry instead of an error. A `401` means the token is wrong or expired; a `404` means the device ID is wrong.
 8. Check the expiry shows **Never**. If it shows a time, key expiry was enabled again on the server (see step 3 of [Tailscale](#tailscale-1)).
 
@@ -298,11 +329,12 @@ Commands:
 tailscale status --json | nix run nixpkgs#jq -- -r .Self.ID
 # write it in deviceid in homepage.nix
 
-# === secrets ===
-sudoedit /etc/homepage-secrets
-# add HOMEPAGE_VAR_TAILSCALE_KEY=<token>
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_TAILSCALE_KEY=<token>
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 sudo systemctl restart homepage-dashboard
 
 # === verification ===
@@ -313,28 +345,28 @@ When the token expires, only steps 1, 4 (replacing the old `HOMEPAGE_VAR_TAILSCA
 
 ## HTTPS
 
-Every app is served over HTTPS with a single wildcard certificate for `*.home.juandiazan.dev`, issued by Let's Encrypt. The config is in `https.nix`. Since the server isn't reachable from the internet (see [Tailscale](#tailscale-1)), Let's Encrypt can't check it over HTTP. It uses the **DNS challenge** instead: the server proves it owns the domain by creating a temporary `TXT` record at Porkbun through its API, so it needs Porkbun API keys stored in `/etc/acme-porkbun`. To set it up the following steps should be followed:
+Every app is served over HTTPS with a single wildcard certificate for `*.home.juandiazan.dev`, issued by Let's Encrypt. The config is in `https.nix`. Since the server isn't reachable from the internet (see [Tailscale](#tailscale-1)), Let's Encrypt can't check it over HTTP. It uses the **DNS challenge** instead: the server proves it owns the domain by creating a temporary `TXT` record at Porkbun through its API, so it needs Porkbun API keys, stored in the `acme-porkbun` secret (see [secrets.md](secrets.md)). To set it up the following steps should be followed:
 
 1. In Porkbun, create an API key from Account → API Access (https://porkbun.com/account/api). It gives two values, the API key (`pk1_...`) and the secret key (`sk1_...`). The secret is only shown once.
 2. Enable API access for the domain: in Domain Management, open `juandiazan.dev`'s details and turn on **API Access**. Without this the keys work, but the server can't edit this domain's records.
-3. Create and edit the file where the keys will be stored with `sudoedit /etc/acme-porkbun`.
-4. Enter both keys with the following format, one per line: `PORKBUN_API_KEY=<api-key>` and `PORKBUN_SECRET_API_KEY=<secret-key>`.
-5. Set the permissions of the file so it can only be read by root with `sudo chmod 600 /etc/acme-porkbun`.
-6. Run `rebuild`. The file must exist before this, otherwise the certificate request fails. Until the real certificate is issued, nginx uses a temporary self-signed one, so browsers show a warning for a minute or two.
-7. Verify with `systemctl status acme-order-renew-home.juandiazan.dev` and `journalctl -u acme-order-renew-home.juandiazan.dev`. The log should end with the certificate being obtained, without errors.
-8. Also verify with the `curl` command below, it should show `CN=*.home.juandiazan.dev` as the subject, Let's Encrypt as the issuer and an expiry date about 90 days ahead. Then open `https://dashboard.home.juandiazan.dev` and check the browser doesn't show any warning.
-9. Check the renewal timer is active with `systemctl list-timers 'acme-renew-*'`.
+3. Save both keys in the `acme-porkbun` secret with the following format, one per line: `PORKBUN_API_KEY=<api-key>` and `PORKBUN_SECRET_API_KEY=<secret-key>` (see [Editing a secret](secrets.md#editing-a-secret)).
+4. Push `nixos-secrets` and update the `secrets` input.
+5. Run `rebuild`. The secret must exist before this, otherwise the certificate request fails. Until the real certificate is issued, nginx uses a temporary self-signed one, so browsers show a warning for a minute or two.
+6. Verify with `systemctl status acme-order-renew-home.juandiazan.dev` and `journalctl -u acme-order-renew-home.juandiazan.dev`. The log should end with the certificate being obtained, without errors.
+7. Also verify with the `curl` command below, it should show `CN=*.home.juandiazan.dev` as the subject, Let's Encrypt as the issuer and an expiry date about 90 days ahead. Then open `https://dashboard.home.juandiazan.dev` and check the browser doesn't show any warning.
+8. Check the renewal timer is active with `systemctl list-timers 'acme-renew-*'`.
 
 Commands:
 
 ```bash
-# === porkbun keys ===
-sudoedit /etc/acme-porkbun
+# === porkbun keys (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e acme-porkbun.age
 # write PORKBUN_API_KEY=<api-key>
 # write PORKBUN_SECRET_API_KEY=<secret-key>
-sudo chmod 600 /etc/acme-porkbun
+# push, then nix flake update secrets in nixos-config
 
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 # === verification ===
 systemctl status acme-order-renew-home.juandiazan.dev
@@ -370,7 +402,7 @@ Each app has its own subdomain, `<app>.home.juandiazan.dev` (the domain is in `o
 Commands:
 
 ```bash
-nrs # sudo nixos-rebuild switch -L --flake ~/nixos-config
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 
 sudo tailscale up
 tailscale ip -4 # goes in the *.home A record at Porkbun
