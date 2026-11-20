@@ -15,8 +15,8 @@
     };
 
     environment.shellAliases = {
-      nrs = "sudo nixos-rebuild switch -L --flake ~/nixos-config";
-      nfu = "sudo nix flake update --flake ~/nixos-config";
+      nrs = "nixos-rebuild switch --sudo -L --flake ~/nixos-config"; # with sudo flag only activation runs as sudo
+      nfu = "nix flake update --flake ~/nixos-config";
       nrsr = "sudo nixos-rebuild switch --rollback";
     };
   };
