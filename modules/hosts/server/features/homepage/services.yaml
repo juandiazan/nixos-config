@@ -61,7 +61,7 @@
         siteMonitor: http://localhost:{{HOMEPAGE_VAR_VAULTWARDEN_PORT}}/alive
 
     - Paperless:
-        icon: paperlessngx.png
+        icon: paperless-ngx.png
         href: https://paperwork.{{HOMEPAGE_VAR_DOMAIN}}
         description: Digital documents.
         wsiteMonitor: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
