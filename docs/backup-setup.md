@@ -1,12 +1,12 @@
 # Backup setup
 
-Nextcloud, Immich, Trilium, Karakeep, Vaultwarden and Navidrome are backed up every night to an external USB disk with [Borg](https://www.borgbackup.org/). The config is in `modules/hosts/server/features/borg.nix` and the mount in `modules/hosts/server/disks.nix`. Useful commands are in [server-commands.md](server-commands.md).
+Nextcloud, Immich, Trilium, Karakeep, Vaultwarden, Navidrome and Paperless are backed up every night to an external USB disk with [Borg](https://www.borgbackup.org/). The config is in `modules/hosts/server/features/borg.nix` and the mount in `modules/hosts/server/disks.nix`. Useful commands are in [server-commands.md](server-commands.md).
 
 The Minecraft world isn't part of the nightly backup. It's backed up by hand into the same repository as `minecraft-<date>` archives (see [World backup](server-setup.md#world-backup)), and restored as explained in [The Minecraft world](#the-minecraft-world).
 
 | | |
 | --- | --- |
-| **What** | `/data/nextcloud`, `/data/immich`, `/data/trilium/backup` (Trilium's own daily, weekly and monthly database snapshots), `/data/karakeep` (without its live database), `/data/vaultwarden` (without its live database and icon cache), `/data/navidrome` (without its live database and cache), `/data/music`, a dump of all PostgreSQL databases (`/var/backup/postgres.sql`) and dumps of Karakeep's, Vaultwarden's and Navidrome's SQLite databases (`/var/backup/karakeep.sql`, `/var/backup/vaultwarden.sql`, `/var/backup/navidrome.sql`) |
+| **What** | `/data/nextcloud`, `/data/immich`, `/data/trilium/backup` (Trilium's own daily, weekly and monthly database snapshots), `/data/karakeep` (without its live database), `/data/vaultwarden` (without its live database and icon cache), `/data/navidrome` (without its live database and cache), `/data/music`, `/data/paperless` (without its search index), a dump of all PostgreSQL databases (Nextcloud's, Immich's and Paperless's, `/var/backup/postgres.sql`) and dumps of Karakeep's, Vaultwarden's and Navidrome's SQLite databases (`/var/backup/karakeep.sql`, `/var/backup/vaultwarden.sql`, `/var/backup/navidrome.sql`) |
 | **Where** | `/backup/borg`, on the external disk labelled `backup` |
 | **When** | every day at 03:00, or on the next boot if the server was off at that time |
 | **How many** | 7 daily, 4 weekly and 6 monthly versions |
@@ -15,7 +15,7 @@ The Minecraft world isn't part of the nightly backup. It's backed up by hand int
 ## How it works
 
 1. Nextcloud is put in maintenance mode, so files and database don't change during the backup.
-2. All PostgreSQL databases (Nextcloud's and Immich's) are dumped to `/var/backup/postgres.sql`, Karakeep's SQLite database to `/var/backup/karakeep.sql`, Vaultwarden's to `/var/backup/vaultwarden.sql` and Navidrome's to `/var/backup/navidrome.sql`. The apps keep running: each dump is read in a single transaction, so it's consistent even if a bookmark, password or play count is saved meanwhile. The live `/data/karakeep/db.db*`, `/data/vaultwarden/db.sqlite3*` and `/data/navidrome/navidrome.db*` files are excluded from the archive, since a copy taken while the app writes to them could be broken. Vaultwarden's `icon_cache` and Navidrome's `cache` are excluded too, since the website icons and the transcoded files and artwork are created again when needed. Trilium's live database isn't backed up either: Trilium makes its own snapshots of it in `/data/trilium/backup`, and those are what goes into the archive.
+2. All PostgreSQL databases (Nextcloud's, Immich's and Paperless's) are dumped to `/var/backup/postgres.sql`, Karakeep's SQLite database to `/var/backup/karakeep.sql`, Vaultwarden's to `/var/backup/vaultwarden.sql` and Navidrome's to `/var/backup/navidrome.sql`. The apps keep running: each dump is read in a single transaction, so it's consistent even if a bookmark, password or play count is saved meanwhile. The live `/data/karakeep/db.db*`, `/data/vaultwarden/db.sqlite3*` and `/data/navidrome/navidrome.db*` files are excluded from the archive, since a copy taken while the app writes to them could be broken. Vaultwarden's `icon_cache` and Navidrome's `cache` are excluded too, since the website icons and the transcoded files and artwork are created again when needed. Trilium's live database isn't backed up either: Trilium makes its own snapshots of it in `/data/trilium/backup`, and those are what goes into the archive. Paperless's search index (`/data/paperless/index`) is excluded too, since it's rebuilt from the database.
 3. Borg creates a new archive. Only what changed since the last one is stored (deduplication), so keeping many versions takes little space.
 4. Old archives are pruned according to the retention above.
 5. Nextcloud leaves maintenance mode. This also happens if the backup fails.
@@ -106,21 +106,24 @@ Not tested yet, only single files have been restored.
 2. Mount a new data disk at `/data` (ext4, labelled `data`).
 3. Stop everything that uses the data.
 4. Extract the latest archive into `/`, which puts the files back in their original paths with their owners.
-5. Restore the PostgreSQL databases from the dump.
+5. Restore the PostgreSQL databases from the dump. This brings back Nextcloud's, Immich's and Paperless's databases.
 6. Rebuild Karakeep's database from its dump (steps 3 to 5 of [Karakeep](#karakeep)), Vaultwarden's from its dump (steps 3 to 5 of [Vaultwarden](#vaultwarden)) and Navidrome's from its dump (steps 4 and 5 of [Navidrome](#navidrome)). Put Trilium's database back from one of its snapshots (steps 4 and 5 of [Trilium](#trilium)).
-7. Start the services again and take Nextcloud out of maintenance mode: the backup was taken while it was on, so the restored `config.php` has it enabled.
-8. Tell the Nextcloud clients the data changed, so they don't overwrite it with older local copies.
-9. Rebuild Karakeep's search index (see [Karakeep](#karakeep)).
+7. Recreate the folders that aren't in the archive, like Paperless's search index folder, with `sudo systemd-tmpfiles --create`.
+8. Start the services again and take Nextcloud out of maintenance mode: the backup was taken while it was on, so the restored `config.php` has it enabled.
+9. Tell the Nextcloud clients the data changed, so they don't overwrite it with older local copies.
+10. Rebuild Karakeep's search index (see [Karakeep](#karakeep)) and Paperless's (step 8 of [Paperless](#paperless)).
 
 ```bash
-sudo systemctl stop nextcloud-cron.timer phpfpm-nextcloud nginx immich-server karakeep-web karakeep-workers vaultwarden trilium-server navidrome
+sudo systemctl stop nextcloud-cron.timer phpfpm-nextcloud nginx immich-server karakeep-web karakeep-workers vaultwarden trilium-server navidrome paperless-web paperless-consumer paperless-task-queue paperless-scheduler
 sudo borg-job-data list --glob-archives 'nixos-server-data-*' --last 1 # latest archive name, skipping minecraft-* ones
 cd / && sudo borg-job-data extract ::<archive>
 sudo cat /var/backup/postgres.sql | sudo -u postgres psql postgres
 # karakeep, vaultwarden, navidrome and trilium databases, see their sections
-sudo systemctl start phpfpm-nextcloud nginx immich-server nextcloud-cron.timer karakeep-workers karakeep-web vaultwarden trilium-server navidrome
+sudo systemd-tmpfiles --create
+sudo systemctl start phpfpm-nextcloud nginx immich-server nextcloud-cron.timer karakeep-workers karakeep-web vaultwarden trilium-server navidrome paperless-web paperless-consumer paperless-task-queue paperless-scheduler
 sudo nextcloud-occ maintenance:mode --off
 sudo nextcloud-occ maintenance:data-fingerprint
+sudo paperless-manage document_index reindex
 ```
 
 ### Karakeep
@@ -231,6 +234,37 @@ sudo cp /data/trilium/backup/backup-daily.db /data/trilium/document.db
 sudo chown trilium:trilium /data/trilium/document.db
 sudo chown -R trilium:trilium /data/trilium/backup
 sudo systemctl start trilium-server
+```
+
+### Paperless
+
+Not tested yet.
+
+The archive has Paperless's files in `data/paperless`: the original documents (`media/documents/originals`), their OCR'd PDF versions (`media/documents/archive`), the thumbnails and the secret key, without the search index (`index`), which is excluded. The database isn't a separate file: it's inside the dump of all PostgreSQL databases, `var/backup/postgres.sql`, together with Nextcloud's and Immich's. To restore only Paperless, only its part of the dump is loaded, so the other databases aren't touched.
+
+1. Pick the archive with `sudo borg-job-data list --glob-archives 'nixos-server-data-*'`.
+2. Stop Paperless with `sudo systemctl stop paperless-web paperless-consumer paperless-task-queue paperless-scheduler`.
+3. Extract `data/paperless` and `var/backup/postgres.sql` into `/`.
+4. Check the dump has Paperless's part with the `grep` command below. It should print one line. **If it prints nothing, stop here**: the next step deletes the current database.
+5. Delete the current database with `sudo -u postgres dropdb paperless`, and load Paperless's part of the dump, which goes from the line `-- Database "paperless" dump` to the next `-- PostgreSQL database dump complete`. It creates the database again, owned by `paperless`, and fills it.
+6. Make sure everything in `/data/paperless` belongs to `paperless`, and recreate the search index folder with `sudo systemd-tmpfiles --create`. The index isn't in the archive, and rebuilding it fails if its folder doesn't exist.
+7. Start Paperless.
+8. Rebuild the search index with `sudo paperless-manage document_index reindex`. Until then, search returns nothing or old results.
+9. Check with `sudo paperless-manage document_sanity_checker`. It reports documents whose file is missing and files that don't belong to any document. A few are expected if a document was added or deleted while the backup was running, or after it (extracting on top of the folder leaves the newer files behind).
+10. Log in and check the documents are there.
+
+```bash
+sudo borg-job-data list --glob-archives 'nixos-server-data-*'
+sudo systemctl stop paperless-web paperless-consumer paperless-task-queue paperless-scheduler
+cd / && sudo borg-job-data extract ::<archive> data/paperless var/backup/postgres.sql
+sudo grep -n '^-- Database "paperless" dump' /var/backup/postgres.sql # must print one line
+sudo -u postgres dropdb paperless
+sudo sed -n '/^-- Database "paperless" dump/,/^-- PostgreSQL database dump complete/p' /var/backup/postgres.sql | sudo -u postgres psql -v ON_ERROR_STOP=1 postgres
+sudo chown -R paperless:paperless /data/paperless
+sudo systemd-tmpfiles --create
+sudo systemctl start paperless-web paperless-consumer paperless-task-queue paperless-scheduler
+sudo paperless-manage document_index reindex
+sudo paperless-manage document_sanity_checker
 ```
 
 ### The Minecraft world

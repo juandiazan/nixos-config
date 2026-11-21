@@ -23,6 +23,7 @@ When the server activates a new configuration (on `rebuild` and on boot), agenix
 | `duckdns-token` | DuckDNS token | `minecraft.nix` (DuckDNS) |
 | `duckdns-domains` | DuckDNS subdomain name (only the name, without `.duckdns.org`) | `minecraft.nix` (DuckDNS) |
 | `discord-mc-webhook-url` | Discord webhook URL | `minecraft.nix` (`mcmanage`) |
+| `paperless-admin-pwd` | Paperless admin password, **only the password** (no `NAME=` in front) | `paperless.nix` |
 
 The subdomain is a secret too because it points at the home IP, and this repo is public.
 
@@ -82,6 +83,7 @@ in {
   "duckdns-token.age".publicKeys = all;
   "duckdns-domains.age".publicKeys = all;
   "discord-mc-webhook-url.age".publicKeys = all;
+  "paperless-admin-pwd.age".publicKeys = all;
 }
 ```
 
@@ -108,7 +110,7 @@ sudo ls -l /run/agenix/
 
 ## Adding a new secret
 
-Each secret has to be in three places: its entry in `agenix-rules.nix`, its `.age` file, and its name in the list in `secrets.nix`. The seven secrets above are already in `agenix-rules.nix` and `secrets.nix`, so creating them from scratch only needs steps 2 and 3, then 6 to 8.
+Each secret has to be in three places: its entry in `agenix-rules.nix`, its `.age` file, and its name in the list in `secrets.nix`. The eight secrets above are already in `agenix-rules.nix` and `secrets.nix`, so creating them from scratch only needs steps 2 and 3, then 6 to 8.
 
 1. In `~/nixos-secrets/agenix-rules.nix`, add a line for the new file: `"<name>.age".publicKeys = all;`.
 2. From `~/nixos-secrets`, create the file with `agenix -e <name>.age`. It opens `$EDITOR`. Write the value, save and close, and agenix encrypts it. `agenix` has to be run from inside the repo, which is where it finds `agenix-rules.nix`.
@@ -121,6 +123,11 @@ Each secret has to be in three places: its entry in `agenix-rules.nix`, its `.ag
 9. Verify with `sudo ls -l /run/agenix/`, then check the app works.
 
 Editors add a newline at the end of the file. That's fine for env files and for values the app trims, but a value that has to be exact (like a passphrase) should be piped into `agenix -e` instead of typed: when its input isn't a terminal, it encrypts whatever it receives as is. For example, `head -c 32 /dev/urandom | base64 | tr -d '\n' | agenix -e <name>.age` creates a random value without a trailing newline.
+
+What goes inside the file depends on the option that uses it:
+
+- **`environmentFile`/`environmentFiles`** (e.g. `vaultwarden-secrets`, `homepage-secrets`, `acme-porkbun`): one `NAME=value` per line. systemd loads each line as an environment variable.
+- **Any other `...File` option** (`passwordFile`, `tokenFile`, ...) (e.g. `paperless-admin-pwd`, `duckdns-token`): **only the value**. The app uses the whole file as the value, so a `NAME=` in front becomes part of the password or token.
 
 If the app reads the file as its own user instead of as root (most NixOS modules read it as root or through systemd, but not all), set the owner in the app's module, next to where it's used:
 
@@ -167,6 +174,7 @@ sudo ls -l /run/agenix/
 | `acme-porkbun` | On the next renewal. To use it now: `sudo systemctl start acme-order-renew-home.juandiazan.dev` |
 | `duckdns-token`, `duckdns-domains` | On the next update (every 5 minutes). To use it now: `sudo systemctl start duckdns` |
 | `discord-mc-webhook-url` | The next time `mcmanage` sends a notification |
+| `paperless-admin-pwd` | Only when the `admin` user doesn't exist yet (the first start, or a new empty database). **Editing it doesn't change the password of an existing `admin`**: change it with `sudo paperless-manage changepassword admin` and save the same value in the secret (see [Paperless](server-setup.md#paperless)) |
 | `borg-passphrase` | On the next backup. **Don't edit it on its own**: it has to match the repository's passphrase, so first change the repository's with `sudo borg-job-data key change-passphrase`, then save the same new value in the secret, without a trailing newline |
 
 Commands:

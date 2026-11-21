@@ -55,7 +55,7 @@
           set -euo pipefail
           mkdir -p /var/backup
 
-          # postgres (nextcloud, immich)
+          # postgres (nextcloud, immich, paperless)
           ${pkgs.util-linux}/bin/runuser -u postgres -- \
             ${config.services.postgresql.package}/bin/pg_dumpall --clean --if-exists > /var/backup/postgres.sql
           chmod 600 /var/backup/postgres.sql

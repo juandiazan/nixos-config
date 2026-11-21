@@ -169,6 +169,67 @@ nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
 - `/data/vaultwarden/rsa_key.pem` signs the login sessions. If it's lost, every device is logged out and has to log in again.
 - Backups (attachments, keys and a dump of the database) run every night, see [backup-setup.md](backup-setup.md). Restoring is explained in [Vaultwarden](backup-setup.md#vaultwarden).
 
+## Paperless
+
+Paperless-ngx is used to store scanned and digital documents (bills, receipts, contracts). It runs OCR on every document, so the text inside them can be searched, and organizes them with correspondents, document types and tags. It's served at `https://paperwork.home.juandiazan.dev`. The settings are in `paperless/paperless.nix`, the files are stored in `/data/paperless` and the database is a PostgreSQL database that the module creates by itself (`database.createLocally`). The admin password is in the `paperless-admin-pwd` secret (see [secrets.md](secrets.md)).
+
+| Setting | What it does |
+| --- | --- |
+| `PAPERLESS_OCR_LANGUAGE = "spa+eng"` | Languages the OCR recognizes. The module installs the matching Tesseract language data |
+| `PAPERLESS_FILENAME_FORMAT` | Stores each document as `<year>/<correspondent>/<title>.pdf` inside `/data/paperless/media/documents`, so the files can be found without Paperless |
+| `PAPERLESS_CONSUMER_RECURSIVE`, `PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS` | Files in subfolders of the consume folder are imported too, and tagged with the folder names (`consume/bills/x.pdf` gets the `bills` tag) |
+
+The time zone isn't set in `paperless.nix`: the module takes it from `time.timeZone` (`locale.nix`). The secret key that signs the login sessions isn't a secret in `nixos-secrets` either: the module generates it on the first start and saves it in `/data/paperless/nixos-paperless-secret-key.env`, which is backed up with the rest of the folder.
+
+To set it up the following steps should be followed:
+
+1. Choose the admin password and save it in the `paperless-admin-pwd` secret (see [Editing a secret](secrets.md#editing-a-secret)). Write **only the password**, without a `NAME=` in front: the whole file is used as the password. The trailing newline the editor adds doesn't matter, the module removes it.
+2. Push `nixos-secrets` and update the `secrets` input.
+3. Make sure the data disk is mounted with `findmnt /data`. Paperless won't start without it.
+4. Run `rebuild`. The first start creates the database and the `admin` user with the password from step 1.
+5. Verify with `systemctl status paperless-web paperless-scheduler paperless-consumer paperless-task-queue`, all four should be active. `journalctl -u paperless-scheduler` should say `Created superuser "admin" with provided password.` Also verify with `curl -I http://127.0.0.1:8006`, it should answer `302` with a redirect to `/accounts/login/`.
+6. Open `https://paperwork.home.juandiazan.dev` and log in with the user `admin` and the password from step 1.
+7. Upload a test PDF by dragging it onto the page. After a few seconds it should show up in Documents. Open it and check that the **Content** tab has the document's text, which means the OCR worked.
+
+Commands:
+
+```bash
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e paperless-admin-pwd.age # write only the password
+# push, then nix flake update secrets in nixos-config
+
+findmnt /data
+
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
+
+# === verification ===
+systemctl status paperless-web paperless-scheduler paperless-consumer paperless-task-queue
+journalctl -u paperless-scheduler | grep superuser
+curl -I http://127.0.0.1:8006
+```
+
+### Adding documents
+
+- **From the web UI:** drag the files onto any page, or use the upload button in Documents.
+- **From the server:** copy them into `/data/paperless/consume`. Paperless imports every file that appears there and deletes it once it's imported. Files in a subfolder are tagged with the subfolder's name. Create the subfolders as the `paperless` user, so Paperless can delete the files inside them.
+
+```bash
+sudo cp <file> /data/paperless/consume/
+sudo -u paperless mkdir /data/paperless/consume/<tag> # files copied here get the <tag> tag
+journalctl -fu paperless-consumer # follow the import
+```
+
+### Notes
+
+- **The secret only sets the password when the `admin` user is created**, on the first start. After that, the module sees that `admin` exists and doesn't touch it (`journalctl -u paperless-scheduler` says `Did not create superuser, a user admin already exists`), so editing the secret doesn't change the password. To change it, run `sudo paperless-manage changepassword admin` and save the same value in the secret, so a new install from scratch gets the same one.
+- The password isn't stored in the database, only a hash of it, so it can't be read back. To check if a password is the right one, log in with it; if it's lost, set a new one with `changepassword`.
+- The module keeps the last username and password it applied in plain text in `/data/paperless/superuser-state`, to know when they change. Only `paperless` can read it (`0600`), but it's also inside the backups, which are encrypted.
+- After several failed logins Paperless shows "too many attempts" and blocks logins for a few minutes. It goes away by itself.
+- The admin user is `admin`, the module's default. It can be changed with `PAPERLESS_ADMIN_USER` in `settings`, but only before the first start: changing it later creates a second admin and leaves the old one.
+- Changing `PAPERLESS_FILENAME_FORMAT` only affects new documents. Move the existing ones to the new format with `sudo paperless-manage document_renamer`.
+- Backups (the files and the database, inside the PostgreSQL dump) run every night, see [backup-setup.md](backup-setup.md). Restoring is explained in [Paperless](backup-setup.md#paperless).
+
 ## Homepage 
 
 Homepage needs some API Keys to show certain service information. The keys are stored in the `homepage-secrets` secret, one `HOMEPAGE_VAR_<NAME>=<value>` per line (see [secrets.md](secrets.md)). Each subsection below adds a line to it with `agenix -e homepage-secrets.age` from `~/nixos-secrets`, then the secret is pushed, the `secrets` input updated and the server rebuilt (see [Editing a secret](secrets.md#editing-a-secret)). Homepage only reads the secret when it starts, and a rebuild doesn't restart it, so after every change run `sudo systemctl restart homepage-dashboard`.
@@ -307,6 +368,33 @@ sudo systemctl restart homepage-dashboard
 
 # === verification ===
 curl "http://localhost:8005/rest/ping?u=<user>&t=<token>&s=<salt>&v=1.16.1&c=homepage&f=json"
+```
+
+### Paperless
+
+For Paperless, the API key is a token created from the user's profile inside the app. The widget shows the number of documents and of documents in the inbox. Paperless tokens can't be limited to some permissions: the token has the same access as its user (for `admin`, everything), so it should be treated like a password. Each user has a single token, so generating a new one breaks the widget until the secret is updated.
+
+1. Go to where Paperless is hosted, log in, open the user menu (top right) → **My Profile** and generate the **API Auth Token**. Copy it.
+2. Edit the `homepage-secrets` secret (see [Editing a secret](secrets.md#editing-a-secret)).
+3. Add a new line with the token obtained in step 1 in the following format: `HOMEPAGE_VAR_PAPERLESS_KEY=<token>`.
+4. Push `nixos-secrets`, update the `secrets` input, run `rebuild` and then `sudo systemctl restart homepage-dashboard`, since Homepage only reads the secret when it starts.
+5. Verify the token with the `curl` command below, it should return JSON with `documents_total`. Also verify Homepage shows the numbers on the Paperless entry instead of an error. A `401` means the token is wrong.
+
+The icon is `paperless-ngx.png` (with a hyphen), while the widget type is `paperlessngx` (without one). Icons come from [Dashboard Icons](https://dashboardicons.com), where the names can be checked.
+
+Commands:
+
+```bash
+# === secret (desktop or laptop), see secrets.md ===
+cd ~/nixos-secrets
+agenix -e homepage-secrets.age # add HOMEPAGE_VAR_PAPERLESS_KEY=<token>
+# push, then nix flake update secrets in nixos-config
+
+nrs # nixos-rebuild switch --sudo -L --flake ~/nixos-config
+sudo systemctl restart homepage-dashboard
+
+# === verification ===
+curl -H "Authorization: Token <token>" "http://localhost:8006/api/statistics/"
 ```
 
 ### Tailscale
