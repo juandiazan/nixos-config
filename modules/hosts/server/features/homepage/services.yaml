@@ -1,14 +1,4 @@
-- Utility:
-    - Nextcloud:
-        icon: nextcloud.png
-        href: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
-        description: Self-hosted cloud.
-        siteMonitor: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}/status.php
-        widget:
-          type: nextcloud
-          url: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
-          key: "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}"
-
+- Media:
     - Immich:
         icon: immich.png
         href: https://photos.{{HOMEPAGE_VAR_DOMAIN}}
@@ -19,6 +9,29 @@
           url: http://localhost:{{HOMEPAGE_VAR_IMMICH_PORT}}
           key: "{{HOMEPAGE_VAR_IMMICH_KEY}}"
           version: 2
+
+    - Navidrome:
+        icon: navidrome.png
+        href: https://music.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Music streaming and library.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
+        widget:
+          type: navidrome
+          url: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
+          user: "{{HOMEPAGE_VAR_NAVIDROME_USER}}"
+          token: "{{HOMEPAGE_VAR_NAVIDROME_TOKEN}}"
+          salt: "{{HOMEPAGE_VAR_NAVIDROME_SALT}}"
+
+- Services:
+    - Nextcloud:
+        icon: nextcloud.png
+        href: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Self-hosted cloud.
+        siteMonitor: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}/status.php
+        widget:
+          type: nextcloud
+          url: https://cloud.{{HOMEPAGE_VAR_DOMAIN}}
+          key: "{{HOMEPAGE_VAR_NEXTCLOUD_KEY}}"
 
     - Trilium:
         icon: trilium.png
@@ -41,23 +54,21 @@
           key: "{{HOMEPAGE_VAR_KARAKEEP_KEY}}"
           fields: [bookmarks, favorites, lists, tags]
 
-    - Navidrome:
-        icon: navidrome.png
-        href: https://music.{{HOMEPAGE_VAR_DOMAIN}}
-        description: Music streaming and library.
-        siteMonitor: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
-        widget:
-          type: navidrome
-          url: http://localhost:{{HOMEPAGE_VAR_NAVIDROME_PORT}}
-          user: "{{HOMEPAGE_VAR_NAVIDROME_USER}}"
-          token: "{{HOMEPAGE_VAR_NAVIDROME_TOKEN}}"
-          salt: "{{HOMEPAGE_VAR_NAVIDROME_SALT}}"
-
     - Vaultwarden:
         icon: vaultwarden.png
         href: https://vault.{{HOMEPAGE_VAR_DOMAIN}}
         description: Passwords, MFA and other security storage.
         siteMonitor: http://localhost:{{HOMEPAGE_VAR_VAULTWARDEN_PORT}}/alive
+
+    - Paperless:
+        icon: paperlessngx.png
+        href: https://paperwork.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Digital documents.
+        wsiteMonitor: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
+        widget:
+          type: paperlessngx
+          url: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
+          key: "{{HOMEPAGE_VAR_PAPERLESS_KEY}}"
 
 - Infrastructure:
     - Tailscale:
