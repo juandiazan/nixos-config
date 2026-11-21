@@ -15,6 +15,7 @@
         "duckdns-token"
         "duckdns-domains"
         "discord-mc-webhook-url"
+        "paperless-admin-pwd"
       ] (name: {
         file = "${inputs.secrets}/${name}.age";
       });

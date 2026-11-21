@@ -17,6 +17,7 @@
         "/var/backup" # database dump, see ExecStartPre
         "/data/navidrome"
         "/data/music"
+        "/data/paperless"
       ];
       exclude = [
         "/data/karakeep/db.db*"
@@ -24,6 +25,7 @@
         "/data/vaultwarden/icon_cache"
         "/data/navidrome/navidrome.db*"
         "/data/navidrome/cache"
+        "/data/paperless/index"
       ];
       repo = "/backup/borg";
       encryption = {

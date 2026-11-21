@@ -19,6 +19,7 @@
         karakeep = 8003;
         vaultwarden = 8004;
         navidrome = 8005;
+        paperless = 8006;
         scrutiny = 7000;
         minecraft = 25565;
       };

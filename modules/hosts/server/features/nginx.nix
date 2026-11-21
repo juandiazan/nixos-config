@@ -15,6 +15,7 @@
       disks = ports.scrutiny;
       vault = ports.vaultwarden;
       music = ports.navidrome;
+      paperwork = ports.paperless;
     };
   in {
     services.nginx = {
