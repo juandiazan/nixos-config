@@ -71,6 +71,12 @@
           key: "{{HOMEPAGE_VAR_PAPERLESS_KEY}}"
 
 - Infrastructure:
+    - Grafana:
+        icon: grafana.png
+        href: https://observability.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Server metrics and dashboards.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_GRAFANA_PORT}}/api/health
+
     - Tailscale:
         icon: tailscale.png
         href: https://login.tailscale.com/admin/machines

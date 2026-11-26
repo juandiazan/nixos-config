@@ -16,6 +16,7 @@
       vault = ports.vaultwarden;
       music = ports.navidrome;
       paperwork = ports.paperless;
+      observability = ports.grafana;
     };
   in {
     services.nginx = {

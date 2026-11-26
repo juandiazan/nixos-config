@@ -16,6 +16,8 @@
         "duckdns-domains"
         "discord-mc-webhook-url"
         "paperless-admin-pwd"
+        "grafana-secret-key"
+        "grafana-admin-pwd"
       ] (name: {
         file = "${inputs.secrets}/${name}.age";
       });

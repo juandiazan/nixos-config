@@ -21,13 +21,16 @@
         navidrome = 8005;
         paperless = 8006;
         scrutiny = 7000;
+        grafana = 7001;
+        prometheus = 7002;
+        nodeExporter = 7003;
         minecraft = 25565;
       };
 
       assertions = [
         {
           assertion = lib.length values == lib.length (lib.unique values);
-          message = "Two services share a port in ports.nix: ${builtins.toJSON config.ports}";
+          message = "The port ${builtins.toJSON config.ports} is already being used for another service";
         }
       ];
     };

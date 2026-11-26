@@ -18,6 +18,7 @@
         "/data/navidrome"
         "/data/music"
         "/data/paperless"
+        "/data/grafana"
       ];
       exclude = [
         "/data/karakeep/db.db*"
@@ -55,7 +56,7 @@
           set -euo pipefail
           mkdir -p /var/backup
 
-          # postgres (nextcloud, immich, paperless)
+          # postgres (nextcloud, immich, paperless, grafana)
           ${pkgs.util-linux}/bin/runuser -u postgres -- \
             ${config.services.postgresql.package}/bin/pg_dumpall --clean --if-exists > /var/backup/postgres.sql
           chmod 600 /var/backup/postgres.sql
