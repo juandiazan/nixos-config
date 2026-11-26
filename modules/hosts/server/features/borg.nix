@@ -19,6 +19,7 @@
         "/data/music"
         "/data/paperless"
         "/data/grafana"
+        "/data/actual"
       ];
       exclude = [
         "/data/karakeep/db.db*"
@@ -27,6 +28,7 @@
         "/data/navidrome/navidrome.db*"
         "/data/navidrome/cache"
         "/data/paperless/index"
+        "/data/actual/server-files/account.sqlite*"
       ];
       repo = "/backup/borg";
       encryption = {
@@ -75,6 +77,11 @@
           ${pkgs.util-linux}/bin/runuser -u navidrome -- \
             ${pkgs.sqlite}/bin/sqlite3 /data/navidrome/navidrome.db .dump > /var/backup/navidrome.sql
           chmod 600 /var/backup/navidrome.sql
+
+          # actual
+          ${pkgs.util-linux}/bin/runuser -u actual -- \
+            ${pkgs.sqlite}/bin/sqlite3 /data/actual/server-files/account.sqlite .dump > /var/backup/actual.sql
+          chmod 600 /var/backup/actual.sql
         ''}"
       ];
       ExecStopPost = ["+${occ} maintenance:mode --off"];

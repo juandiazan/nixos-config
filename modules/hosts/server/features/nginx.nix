@@ -17,6 +17,7 @@
       music = ports.navidrome;
       paperwork = ports.paperless;
       observability = ports.grafana;
+      finance = ports.actual;
     };
   in {
     services.nginx = {

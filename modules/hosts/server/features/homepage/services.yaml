@@ -70,6 +70,12 @@
           url: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
           key: "{{HOMEPAGE_VAR_PAPERLESS_KEY}}"
 
+    - Actual:
+        icon: actual-budget.png
+        href: https://finance.{{HOMEPAGE_VAR_DOMAIN}}
+        description: Personal finance.
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_ACTUAL_PORT}}
+
 - Infrastructure:
     - Grafana:
         icon: grafana.png

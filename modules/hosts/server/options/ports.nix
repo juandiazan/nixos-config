@@ -20,6 +20,7 @@
         vaultwarden = 8004;
         navidrome = 8005;
         paperless = 8006;
+        actual = 8007;
         scrutiny = 7000;
         grafana = 7001;
         prometheus = 7002;
