@@ -49,20 +49,19 @@
           ];
         };
       };
+    };
+    age.secrets.grafana-secret-key.owner = "grafana";
+    age.secrets.grafana-admin-pwd.owner = "grafana";
 
-      age.secrets.grafana-secret-key.owner = "grafana";
-      age.secrets.grafana-admin-pwd.owner = "grafana";
-
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = ["grafana"];
-        ensureUsers = [
-          {
-            name = "grafana";
-            ensureDBOwnership = true;
-          }
-        ];
-      };
+    services.postgresql = {
+      enable = true;
+      ensureDatabases = ["grafana"];
+      ensureUsers = [
+        {
+          name = "grafana";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }
