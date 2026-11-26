@@ -64,7 +64,7 @@
         icon: paperless-ngx.png
         href: https://paperwork.{{HOMEPAGE_VAR_DOMAIN}}
         description: Digital documents.
-        wsiteMonitor: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
+        siteMonitor: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
         widget:
           type: paperlessngx
           url: http://localhost:{{HOMEPAGE_VAR_PAPERLESS_PORT}}
