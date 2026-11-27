@@ -45,6 +45,16 @@
               type = "prometheus";
               url = "http://127.0.0.1:${toString ports.prometheus}";
               isDefault = true;
+              jsonData.timeInterval = "15s";
+            }
+          ];
+        };
+        dashboards.settings = {
+          apiVersion = 1;
+          providers = [
+            {
+              name = "default";
+              options.path = ./dashboards;
             }
           ];
         };
