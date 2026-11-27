@@ -29,6 +29,10 @@
 
       programs.git.enable = true;
 
+      environment.shellAliases = {
+        gl = "git pull";
+      };
+
       zramSwap.enable = true;
 
       environment.systemPackages = [
